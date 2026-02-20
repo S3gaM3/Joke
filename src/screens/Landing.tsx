@@ -18,21 +18,21 @@ type GameId =
   | 'carbon'
   | 'drift'
 
-// Картинки: picsum.photos — бесплатные фото из открытых источников, seed для стабильности
-const PICSUM = (seed: string) => `https://picsum.photos/seed/${seed}/600/800`
+// Картинки: picsum.dev — CDN с фото, seed для стабильности
+const PICSUM_DEV = (seed: string) => `https://picsum.dev/600/800?seed=${encodeURIComponent(seed)}`
 
 const GAMES: { id: GameId; title: string; desc: string; image: string }[] = [
-  { id: 'launch', title: 'Launch Control', desc: 'Поймай GO без фальстарта. Точный старт — это характер.', image: PICSUM('launch-race') },
-  { id: 'shift', title: 'Shift Points', desc: 'Переключай строго в зелёном окне RPM.', image: PICSUM('shift-gear') },
-  { id: 'park', title: 'Parking Sensor', desc: 'Остановись в зоне 15–25cm. Парковка ювелирная.', image: PICSUM('parking-car') },
-  { id: 'hud', title: 'HUD Memory', desc: 'Повтори последовательность световых сегментов.', image: PICSUM('hud-dashboard') },
-  { id: 'shade', title: 'Найди оттенок', desc: 'Премиальное колесо выбора — как регулятор в авто.', image: PICSUM('shade-color') },
-  { id: 'lines', title: 'Собери композицию', desc: 'Поймай линии по таймингу и собери вензель.', image: PICSUM('lines-art') },
-  { id: 'react', title: 'Реакция', desc: 'Клик‑тест: иконки появляются и исчезают всё быстрее.', image: PICSUM('react-speed') },
-  { id: 'ambient', title: 'Ambient Light', desc: 'Настройка подсветки: оттенок + яркость.', image: PICSUM('ambient-light') },
-  { id: 'apex', title: 'Apex Line', desc: 'Траектория по точкам: возьми апекс спокойно и точно.', image: PICSUM('apex-track') },
-  { id: 'drift', title: 'Drift Angle', desc: 'Держи угол в окне ±3°. Управление как в панели.', image: PICSUM('drift-angle') },
-  { id: 'carbon', title: 'Carbon Align', desc: 'Подгони текстуру карбона до идеального совпадения.', image: PICSUM('carbon-fiber') },
+  { id: 'launch', title: 'Launch Control', desc: 'Поймай GO без фальстарта. Точный старт — это характер.', image: PICSUM_DEV('launch') },
+  { id: 'shift', title: 'Shift Points', desc: 'Переключай строго в зелёном окне RPM.', image: PICSUM_DEV('shift') },
+  { id: 'park', title: 'Parking Sensor', desc: 'Остановись в зоне 15–25cm. Парковка ювелирная.', image: PICSUM_DEV('park') },
+  { id: 'hud', title: 'HUD Memory', desc: 'Повтори последовательность световых сегментов.', image: PICSUM_DEV('hud') },
+  { id: 'shade', title: 'Найди оттенок', desc: 'Премиальное колесо выбора — как регулятор в авто.', image: PICSUM_DEV('shade') },
+  { id: 'lines', title: 'Собери композицию', desc: 'Поймай линии по таймингу и собери вензель.', image: PICSUM_DEV('lines') },
+  { id: 'react', title: 'Реакция', desc: 'Клик‑тест: иконки появляются и исчезают всё быстрее.', image: PICSUM_DEV('react') },
+  { id: 'ambient', title: 'Ambient Light', desc: 'Настройка подсветки: оттенок + яркость.', image: PICSUM_DEV('ambient') },
+  { id: 'apex', title: 'Apex Line', desc: 'Траектория по точкам: возьми апекс спокойно и точно.', image: PICSUM_DEV('apex') },
+  { id: 'drift', title: 'Drift Angle', desc: 'Держи угол в окне ±3°. Управление как в панели.', image: PICSUM_DEV('drift') },
+  { id: 'carbon', title: 'Carbon Align', desc: 'Подгони текстуру карбона до идеального совпадения.', image: PICSUM_DEV('carbon') },
 ]
 
 export function Landing() {
