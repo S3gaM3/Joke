@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { Layout } from '../components/Layout'
 import { FindShadeGame } from '../games/find-shade/FindShadeGame'
@@ -12,7 +13,7 @@ import { AmbientLightGame } from '../games/ambient/AmbientLightGame'
 import { CarbonAlignGame } from '../games/carbon/CarbonAlignGame'
 import { DriftAngleGame } from '../games/drift/DriftAngleGame'
 
-const GAME_MAP: Record<string, { title: string; Component: () => JSX.Element }> = {
+const GAME_MAP: Record<string, { title: string; Component: () => ReactElement }> = {
   launch: { title: 'Launch Control', Component: LaunchControlGame },
   shift: { title: 'Shift Points', Component: ShiftPointsGame },
   park: { title: 'Parking Sensor', Component: ParkingSensorGame },

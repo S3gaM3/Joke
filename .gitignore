@@ -19,6 +19,7 @@ dist-ssr
 .DS_Store
 *.suo
 *.ntvs*
+Poseify-1.0.0/
 *.njsproj
 *.sln
 *.sw?

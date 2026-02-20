@@ -4,7 +4,7 @@ import { Button } from '../../components/Button'
 import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
-import { clamp, randInt, sample } from '../../lib/random'
+import { randInt, sample } from '../../lib/random'
 
 type Phase = 'idle' | 'armed' | 'go' | 'done'
 
@@ -237,7 +237,7 @@ export function LaunchControlGame() {
             />
           </motion.div>
         </button>
-      {null && <div>
+      {false && <div>
         <div className="text-xs">TIP</div>
         <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
           Стабильность важнее одного «супер‑клика»
