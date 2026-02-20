@@ -125,3 +125,107 @@ body {
 .neon-underline:focus-visible::after {
   transform: scaleX(1);
 }
+
+@keyframes drift-y {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -34px, 0);
+  }
+}
+
+@keyframes sheen {
+  0% {
+    transform: translate3d(-20%, 0, 0) rotate(12deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.3;
+  }
+  55% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate3d(110%, 0, 0) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.bg-grid {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(
+    900px 640px at 50% 20%,
+    rgba(0, 0, 0, 0.9),
+    transparent 70%
+  );
+  opacity: 0.5;
+  animation: drift-y 10s linear infinite alternate;
+}
+
+.bg-lines {
+  background-image: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.06) 28%,
+      rgba(66, 229, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.04) 62%,
+      transparent 100%
+    ),
+    radial-gradient(
+      900px 520px at 70% 12%,
+      rgba(177, 140, 255, 0.1),
+      transparent 65%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  filter: blur(0.2px);
+}
+
+.bg-sheen {
+  position: relative;
+}
+.bg-sheen::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+  filter: blur(0.3px);
+  animation: sheen 9.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  opacity: 0;
+}
+
+.bg-vignette {
+  background: radial-gradient(
+      900px 520px at 50% 15%,
+      transparent 0%,
+      rgba(0, 0, 0, 0.22) 55%,
+      rgba(0, 0, 0, 0.52) 100%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.54));
+  opacity: 0.95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-grid {
+    animation: none;
+  }
+  .bg-sheen::before {
+    animation: none;
+    opacity: 0.12;
+  }
+}
