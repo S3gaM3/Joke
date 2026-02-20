@@ -71,3 +71,22 @@ export default defineConfig([
   },
 ])
 ```
+
+## GitHub Pages deployment
+
+This project is configured to deploy to GitHub Pages with GitHub Actions.
+
+- Workflow file: `.github/workflows/deploy-pages.yml`
+- Auto deploy on push to `main` or `master`
+- Manual deploy is available via `workflow_dispatch`
+
+### Required repository setting
+
+In GitHub repository settings, open **Pages** and make sure the source is set to **GitHub Actions**.
+
+### Local production build check
+
+```bash
+npm ci
+npm run build
+```
