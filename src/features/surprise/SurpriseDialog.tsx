@@ -143,8 +143,8 @@ export function SurpriseDialog({
                   <div className="h-px w-full chrome-line opacity-40" />
 
                   <Tabs.Root {...tabsRootProps} className="mt-6">
-                    <div className="grid gap-5 lg:grid-cols-[260px_1fr] lg:items-start">
-                      <Tabs.List className="flex gap-2 overflow-x-auto pb-2 lg:block lg:overflow-visible lg:pb-0">
+                    <div className="grid gap-5 lg:grid-cols-[300px_1fr] lg:items-start">
+                      <Tabs.List className="flex gap-2 overflow-x-auto pb-2 lg:block lg:overflow-visible lg:pb-0 lg:rounded-[22px] lg:border lg:border-white/10 lg:bg-white/6 lg:p-2">
                         {(
                           [
                             { v: 'launch', t: 'Launch Control' },
@@ -163,13 +163,13 @@ export function SurpriseDialog({
                           <Tabs.Trigger
                             key={it.v}
                             value={it.v}
-                            className="dash-panel-sm shrink-0 rounded-[16px] border border-white/12 bg-white/4 px-4 py-3 text-left text-sm text-white/70 transition-all duration-500 ease-in-out hover:-translate-y-0.5 hover:border-white/22 hover:bg-white/6 hover:text-white/88 data-[state=active]:border-[rgba(var(--accent2-rgb)/0.50)] data-[state=active]:bg-white/7 data-[state=active]:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 lg:mb-2 lg:w-full"
+                            className="shrink-0 rounded-[18px] border border-white/10 bg-white/6 px-4 py-3 text-left text-[15px] font-semibold tracking-tight text-white/78 transition-all duration-300 ease-out hover:bg-white/8 data-[state=active]:border-[rgba(var(--accent-rgb)/0.45)] data-[state=active]:bg-white/9 data-[state=active]:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-rgb)/0.35)] lg:mb-2 lg:w-full"
                           >
                             <div className="font-display tracking-tight">
                               {it.t}
                             </div>
-                            <div className="mt-1 text-[11px] tracking-[0.25em] text-white/40">
-                              MODE
+                            <div className="mt-1 text-[11px] font-medium text-white/45">
+                              Mode
                             </div>
                           </Tabs.Trigger>
                         ))}

@@ -4,7 +4,6 @@ import { Button } from '../components/Button'
 import { Monogram } from '../components/Monogram'
 import { Reveal } from '../components/Reveal'
 import { MaterialTuner } from '../features/material/MaterialTuner'
-import { ComplimentPanel } from '../features/compliments/ComplimentPanel'
 import { SurpriseDialog } from '../features/surprise/SurpriseDialog'
 import { EASE_OUT } from '../lib/motion'
 
@@ -467,12 +466,6 @@ export function Landing() {
                 ))}
               </div>
             </div>
-          </Reveal>
-        </section>
-
-        <section className="mt-14">
-          <Reveal>
-            <ComplimentPanel />
           </Reveal>
         </section>
 
