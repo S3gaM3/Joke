@@ -1,0 +1,407 @@
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Button } from '../../components/Button'
+import { ResultPlaque } from '../../features/surprise/ResultPlaque'
+import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
+import { clamp, randInt, sample, uid } from '../../lib/random'
+import { useElementSize } from '../../lib/useElementSize'
+
+type Mode = 'idle' | 'running' | 'won' | 'lost'
+type IconKind = 'star' | 'diamond' | 'bulb'
+
+type Target = {
+  id: string
+  x: number
+  y: number
+  kind: IconKind
+  ttlMs: number
+}
+
+const WIN_MESSAGES = [
+  'Скорость мысли! Вы невероятно быстры.',
+  'Вы успеваете за всеми трендами и задачами. Респект!',
+  'Ваша энергия заряжает! Победа закономерна.',
+] as const
+
+const LOSE_MESSAGES = [
+  'Ничего страшного, главное — вовремя остановиться и выпить кофе.',
+  'Даже болиды Формулы-1 заезжают на пит-стоп. Отдохните и возвращайтесь!',
+  'Сегодня не ваш день? Завтра вы снова соберете все звезды.',
+] as const
+
+function Icon({ kind }: { kind: IconKind }) {
+  if (kind === 'diamond') {
+    return (
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
+        <path
+          d="M12 2 L21 9 L12 22 L3 9 Z"
+          fill="none"
+          stroke="rgba(255,255,255,0.82)"
+          strokeWidth="1.6"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M3 9 L12 9 L21 9"
+          stroke="rgba(66,229,255,0.65)"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
+      </svg>
+    )
+  }
+  if (kind === 'bulb') {
+    return (
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
+        <path
+          d="M9 21h6"
+          stroke="rgba(255,255,255,0.72)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M10 18h4"
+          stroke="rgba(255,255,255,0.72)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M8 10a4 4 0 1 1 8 0c0 2.5-2 3.2-2 5H10c0-1.8-2-2.5-2-5Z"
+          fill="none"
+          stroke="rgba(255,210,138,0.82)"
+          strokeWidth="1.6"
+          strokeLinejoin="round"
+        />
+      </svg>
+    )
+  }
+  return (
+    <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
+      <path
+        d="M12 2.8 14.8 9l6.7.6-5 4.3 1.6 6.5L12 16.9 5.9 20.4 7.5 13.9 2.5 9.6 9.2 9 12 2.8Z"
+        fill="none"
+        stroke="rgba(255,255,255,0.82)"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 2.8 14.8 9"
+        stroke="rgba(66,229,255,0.65)"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+export function ReactionGame() {
+  const arenaRef = useRef<HTMLDivElement | null>(null)
+  const { width: w, height: h } = useElementSize(arenaRef)
+
+  const [mode, setMode] = useState<Mode>('idle')
+  const modeRef = useRef<Mode>('idle')
+  const [timeLeft, setTimeLeft] = useState(30)
+  const [score, setScore] = useState(0)
+  const [misses, setMisses] = useState(0)
+  const [target, setTarget] = useState<Target | null>(null)
+  const [result, setResult] = useState<null | { tone: 'success' | 'fail'; msg: string }>(
+    null,
+  )
+  const [burst, setBurst] = useState<{ id: string; x: number; y: number; k: IconKind }[]>(
+    [],
+  )
+
+  const goal = 18
+
+  const dims = useMemo(() => {
+    return { aw: w || 640, ah: h || 360 }
+  }, [w, h])
+
+  const timeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    modeRef.current = mode
+  }, [mode])
+
+  const clearTimers = () => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+  }
+
+  const spawn = (nextScore: number) => {
+    clearTimers()
+    const size = 54
+    const x = randInt(size, Math.max(size, Math.floor(dims.aw - size)))
+    const y = randInt(size, Math.max(size, Math.floor(dims.ah - size)))
+    const ttl = clamp(900 - nextScore * 28, 320, 900)
+    const kinds: IconKind[] = ['star', 'diamond', 'bulb']
+    const kind = kinds[randInt(0, kinds.length - 1)]!
+    const t: Target = { id: uid('t'), x, y, kind, ttlMs: ttl }
+    setTarget(t)
+    timeoutRef.current = window.setTimeout(() => {
+      setMisses((m) => m + 1)
+      setTarget(null)
+      if (modeRef.current === 'running') spawn(nextScore)
+    }, ttl)
+  }
+
+  const start = () => {
+    setResult(null)
+    setMode('running')
+    setTimeLeft(30)
+    setScore(0)
+    setMisses(0)
+    setBurst([])
+    spawn(0)
+  }
+
+  const reset = () => {
+    clearTimers()
+    setTarget(null)
+    setMode('idle')
+    setResult(null)
+    setTimeLeft(30)
+    setScore(0)
+    setMisses(0)
+    setBurst([])
+  }
+
+  useEffect(() => {
+    return () => clearTimers()
+  }, [])
+
+  useEffect(() => {
+    if (mode !== 'running') return
+    const endAt = performance.now() + 30_000
+    const int = window.setInterval(() => {
+      const sec = Math.max(0, Math.ceil((endAt - performance.now()) / 1000))
+      setTimeLeft(sec)
+    }, 120)
+    return () => window.clearInterval(int)
+  }, [mode])
+
+  useEffect(() => {
+    if (mode !== 'running') return
+    if (timeLeft > 0) return
+    clearTimers()
+    setTarget(null)
+    if (score >= goal) {
+      setMode('won')
+      setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
+    } else {
+      setMode('lost')
+      setResult({ tone: 'fail', msg: sample(LOSE_MESSAGES) })
+    }
+  }, [goal, mode, score, timeLeft])
+
+  useEffect(() => {
+    if (mode !== 'running') return
+    if (score < goal) return
+    clearTimers()
+    setTarget(null)
+    setMode('won')
+    setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
+  }, [goal, mode, score])
+
+  useEffect(() => {
+    if (mode !== 'won') return
+    const cx = Math.round(dims.aw * 0.5)
+    const cy = Math.round(dims.ah * 0.5)
+    const kinds: IconKind[] = ['star', 'diamond', 'bulb']
+    const b = Array.from({ length: 16 }, (_, i) => ({
+      id: uid(`b${i}`),
+      x: cx + randInt(-40, 40),
+      y: cy + randInt(-30, 30),
+      k: kinds[randInt(0, 2)]!,
+    }))
+    setBurst(b)
+    const t = window.setTimeout(() => setBurst([]), 1300)
+    return () => window.clearTimeout(t)
+  }, [dims.ah, dims.aw, mode])
+
+  const onHit = () => {
+    if (mode !== 'running') return
+    clearTimers()
+    setTarget(null)
+    setScore((s) => {
+      const ns = s + 1
+      window.setTimeout(() => {
+        if (modeRef.current === 'running') spawn(ns)
+      }, 120)
+      return ns
+    })
+  }
+
+  return (
+    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
+      <div className="glass rounded-[18px] p-7">
+        <div className="flex flex-wrap items-start justify-between gap-6">
+          <div>
+            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
+              Реакция
+            </div>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
+              Иконки появляются и исчезают всё быстрее. Успейте нажать. Скорость
+              растёт с каждым попаданием.
+            </p>
+          </div>
+          <div className="text-right">
+            <div className="text-xs tracking-[0.25em] text-white/40">TIME</div>
+            <div className="font-display mt-1 text-xl font-semibold text-white/80">
+              {timeLeft}s
+            </div>
+            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
+              SCORE {score}/{goal}
+            </div>
+            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
+              MISSES {misses}
+            </div>
+          </div>
+        </div>
+
+        <div
+          ref={arenaRef}
+          className="mt-7 relative h-[360px] overflow-hidden rounded-[18px] border border-white/12 bg-white/3"
+          style={{
+            boxShadow:
+              'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 30px 90px rgba(0,0,0,0.65)',
+          }}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-70"
+            style={{
+              background:
+                'radial-gradient(900px 520px at 20% 0%, rgba(177,140,255,0.10), transparent 60%), radial-gradient(800px 460px at 95% 15%, rgba(66,229,255,0.10), transparent 58%)',
+            }}
+          />
+
+          <AnimatePresence>
+            {target && mode === 'running' ? (
+              <motion.button
+                key={target.id}
+                type="button"
+                onClick={onHit}
+                className="absolute grid size-[62px] place-items-center rounded-2xl border border-white/16 bg-white/6 shadow-[0_0_0_1px_rgba(255,255,255,0.08),_0_22px_60px_rgba(0,0,0,0.68)] transition-all duration-500 ease-in-out hover:-translate-y-1 hover:border-[rgba(66,229,255,0.45)] hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                style={{
+                  left: target.x,
+                  top: target.y,
+                  transform: 'translate(-50%, -50%)',
+                }}
+                initial={{ opacity: 0, scale: 0.6, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, scale: 0.6, filter: 'blur(10px)' }}
+                transition={{ duration: DUR.fast, ease: EASE_OUT }}
+                aria-label="Нажать иконку"
+              >
+                <Icon kind={target.kind} />
+              </motion.button>
+            ) : null}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {burst.map((b) => (
+              <motion.div
+                key={b.id}
+                className="pointer-events-none absolute"
+                style={{
+                  left: b.x,
+                  top: b.y,
+                  transform: 'translate(-50%, -50%)',
+                }}
+                initial={{ opacity: 0, scale: 0.6, filter: 'blur(8px)' }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0.7, 1, 0.9],
+                  x: randInt(-220, 220),
+                  y: randInt(-180, 180),
+                  rotate: randInt(-40, 40),
+                  filter: ['blur(6px)', 'blur(0px)', 'blur(8px)'],
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.15, ease: EASE_IN_OUT }}
+              >
+                <div
+                  className="grid size-[34px] place-items-center rounded-2xl border border-white/10 bg-white/4"
+                  style={{
+                    boxShadow:
+                      '0 0 0 1px rgba(255,255,255,0.06), 0 0 26px rgba(66,229,255,0.18)',
+                  }}
+                >
+                  <Icon kind={b.k} />
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {mode === 'lost' ? (
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DUR.base, ease: EASE_OUT }}
+                style={{
+                  background:
+                    'radial-gradient(900px 520px at 50% 60%, rgba(0,0,0,0.25), rgba(0,0,0,0.55))',
+                }}
+              />
+            ) : null}
+          </AnimatePresence>
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          {mode === 'running' ? (
+            <Button variant="glass" onClick={reset}>
+              Стоп
+            </Button>
+          ) : (
+            <Button onClick={start}>Старт</Button>
+          )}
+          <Button variant="glass" onClick={reset}>
+            Сброс
+          </Button>
+
+          <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
+            SPEED {Math.round(clamp(900 - score * 28, 320, 900))}ms
+          </div>
+        </div>
+      </div>
+
+      <div className="glass rounded-[18px] p-7">
+        <div className="text-xs tracking-[0.25em] text-white/40">RULE</div>
+        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
+          {goal} попаданий за 30 секунд
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-white/60">
+          Чем выше счёт, тем короче «окно» появления. Движения и анимации
+          специально мягкие — как в дорогом интерфейсе.
+        </p>
+        <div className="mt-6 h-px w-full chrome-line opacity-35" />
+        <div className="mt-5 text-sm leading-relaxed text-white/55">
+          <span className="text-white/70">Подсказка:</span> кликайте уверенно,
+          без «дёрганья» мыши — это быстрее.
+        </div>
+      </div>
+
+      <ResultPlaque
+        tone={result?.tone ?? 'fail'}
+        title={
+          result?.tone === 'success'
+            ? `Победа · ${score} очков`
+            : result?.tone === 'fail'
+              ? `Итог · ${score} очков`
+              : ''
+        }
+        message={result?.msg ?? ''}
+        visible={Boolean(result)}
+        onClose={() => setResult(null)}
+      />
+    </div>
+  )
+}
+

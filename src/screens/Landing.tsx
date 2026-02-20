@@ -1,9 +1,13 @@
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { Button } from '../components/Button'
 import { Reveal } from '../components/Reveal'
+import { SurpriseDialog } from '../features/surprise/SurpriseDialog'
 import { EASE_OUT } from '../lib/motion'
 
 export function Landing() {
+  const [surpriseOpen, setSurpriseOpen] = useState(false)
+
   const scrollToSurprise = () => {
     document
       .getElementById('surprise')
@@ -39,12 +43,13 @@ export function Landing() {
           </div>
         </div>
 
-        <a
+        <button
+          type="button"
+          onClick={() => setSurpriseOpen(true)}
           className="neon-underline rounded-full px-3 py-2 text-sm text-white/70 transition-all duration-500 ease-in-out hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
-          href="#surprise"
         >
           Сюрприз
-        </a>
+        </button>
       </header>
 
       <main className="mx-auto w-full max-w-6xl px-6 pb-24 pt-10">
@@ -76,7 +81,9 @@ export function Landing() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button onClick={scrollToSurprise}>Открыть сюрприз</Button>
+              <Button onClick={() => setSurpriseOpen(true)}>
+                Открыть сюрприз
+              </Button>
               <a
                 href="#collab"
                 className="neon-underline rounded-full px-5 py-3 text-sm text-white/70 transition-all duration-500 ease-in-out hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
@@ -231,9 +238,12 @@ export function Landing() {
                     удовольствие от взаимодействия.
                   </p>
                 </div>
-                <Button variant="glass" onClick={scrollToSurprise} disabled>
-                  Открыть панель (в разработке)
-                </Button>
+                  <Button
+                    variant="glass"
+                    onClick={() => setSurpriseOpen(true)}
+                  >
+                    Открыть панель
+                  </Button>
               </div>
 
               <div className="mt-8 grid gap-5 sm:grid-cols-3">
@@ -269,6 +279,8 @@ export function Landing() {
           </div>
         </footer>
       </main>
+
+      <SurpriseDialog open={surpriseOpen} onOpenChange={setSurpriseOpen} />
     </div>
   )
 }
