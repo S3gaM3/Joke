@@ -90,14 +90,14 @@ export function SurpriseDialog({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 w-[min(980px,92vw)] -translate-x-1/2 -translate-y-1/2 focus:outline-none"
+          className="fixed bottom-4 left-1/2 z-50 w-[min(980px,96vw)] -translate-x-1/2 focus:outline-none"
           aria-label="Сюрприз: мини-игры"
         >
           <motion.div
-            className="glass-strong max-h-[86dvh] overflow-hidden"
-            initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
+            className="glass-strong max-h-[88dvh] overflow-hidden rounded-[28px]"
+            initial={{ opacity: 0, y: 28, filter: 'blur(12px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
+            exit={{ opacity: 0, y: 28, filter: 'blur(12px)' }}
             transition={{ duration: DUR.base, ease: EASE_OUT }}
           >
             <div className="relative">
@@ -111,14 +111,20 @@ export function SurpriseDialog({
               />
 
               <div className="relative max-h-[86dvh] overflow-y-auto overscroll-contain">
+                <div className="relative flex justify-center pt-3">
+                  <div
+                    aria-hidden
+                    className="h-[5px] w-14 rounded-full bg-white/20"
+                  />
+                </div>
                 <div className="relative flex items-start justify-between gap-6 px-7 py-6 sm:px-8">
                   <div>
                     <Dialog.Title className="font-display text-xl font-semibold tracking-tight text-white/92">
                       Сюрприз · Премиум мини‑игры
                     </Dialog.Title>
                     <Dialog.Description className="mt-1 text-sm leading-relaxed text-white/55">
-                      30–60 секунд. Чистая геометрия. Стекло и металл. Плавные
-                      переходы.
+                      30–60 секунд. Чистая система. Мягкие материалы. Плавные
+                      переходы — как в iOS.
                     </Dialog.Description>
                   </div>
 

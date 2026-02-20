@@ -20,12 +20,12 @@ export function ResultPlaque({
 }: ResultPlaqueProps) {
   const accentHi =
     tone === 'success'
-      ? 'rgba(var(--accent2-rgb) / 0.90)'
-      : 'rgba(var(--accent-rgb) / 0.82)'
+      ? 'rgba(var(--accent-rgb) / 0.92)'
+      : 'rgba(var(--danger-rgb) / 0.86)'
   const accentGlow =
     tone === 'success'
-      ? 'rgba(var(--accent2-rgb) / 0.18)'
-      : 'rgba(var(--accent-rgb) / 0.18)'
+      ? 'rgba(var(--accent-rgb) / 0.16)'
+      : 'rgba(var(--danger-rgb) / 0.14)'
 
   return (
     <AnimatePresence>
@@ -66,7 +66,7 @@ export function ResultPlaque({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-full border border-white/14 bg-white/5 px-3 py-2 text-xs tracking-[0.18em] text-white/60 transition-all duration-500 ease-in-out hover:border-white/22 hover:bg-white/7 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                  className="rounded-[12px] border border-white/10 bg-white/8 px-3 py-2 text-xs font-semibold tracking-[0.12em] text-white/70 transition-all duration-300 ease-out hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-rgb)/0.35)]"
                 >
                   OK
                 </button>

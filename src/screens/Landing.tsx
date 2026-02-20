@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Button } from '../components/Button'
-import { InstrumentCluster } from '../components/InstrumentCluster'
 import { Monogram } from '../components/Monogram'
 import { Reveal } from '../components/Reveal'
 import { MaterialTuner } from '../features/material/MaterialTuner'
@@ -27,40 +26,31 @@ export function Landing() {
 
   return (
     <div className="min-h-dvh">
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
-        <div className="flex items-center gap-3">
-          <div
-            className="grid size-10 place-items-center rounded-2xl border"
-            style={{
-              background:
-                'linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04))',
-              borderColor: 'rgba(255,255,255,0.16)',
-              boxShadow:
-                '0 0 0 1px rgba(255,255,255,0.08), 0 18px 55px rgba(0,0,0,0.65)',
-            }}
-            aria-hidden
-          >
-            <span className="font-display text-sm tracking-[0.35em] text-white/80">
-              AVA
-            </span>
-          </div>
-          <div className="leading-tight">
-            <div className="font-display text-sm font-semibold tracking-[0.22em] text-white/85">
-              PREMIUM GIFT
+      <header className="sticky top-0 z-30 border-b border-white/8 bg-black/25 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div
+              className="grid size-9 place-items-center rounded-[12px] border border-white/10 bg-white/6"
+              aria-hidden
+            >
+              <span className="font-display text-xs font-semibold tracking-[0.30em] text-white/85">
+                AVA
+              </span>
             </div>
-            <div className="text-xs tracking-wide text-white/50">
-              Александра · Влада · Анна
+            <div className="leading-tight">
+              <div className="font-display text-sm font-semibold tracking-tight text-white/88">
+                AVA
+              </div>
+              <div className="text-xs text-white/55">
+                Александра · Влада · Анна
+              </div>
             </div>
           </div>
-        </div>
 
-        <button
-          type="button"
-          onClick={() => setSurpriseOpen(true)}
-          className="neon-underline rounded-full px-3 py-2 text-sm text-white/70 transition-all duration-500 ease-in-out hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
-        >
-          Сюрприз
-        </button>
+          <Button variant="glass" onClick={() => setSurpriseOpen(true)}>
+            Сюрприз
+          </Button>
+        </div>
       </header>
 
       <main className="mx-auto w-full max-w-6xl px-6 pb-24 pt-10">
@@ -69,21 +59,16 @@ export function Landing() {
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.6, ease: EASE_OUT }}
         >
-          <InstrumentCluster
-            title="STARTUP SEQUENCE"
-            subtitle="Александра · Влада · Анна"
-          />
-
-          <div className="mt-6 glass dash-panel hud-scan overflow-hidden p-8 sm:p-10">
-            <div className="font-display text-xs font-semibold tracking-[0.38em] text-white/55">
-              SPORTY · METAL · CARBON · HUD
+          <div className="glass-strong overflow-hidden p-8 sm:p-10">
+            <div className="font-display text-xs font-semibold tracking-[0.28em] text-white/55">
+              iOS‑INSPIRED · MATERIAL · TYPOGRAPHY
             </div>
-            <h1 className="font-display mt-5 text-balance text-4xl font-bold tracking-[-0.02em] text-white/92 sm:text-6xl">
-              Три имени. Один безупречный стиль.
+            <h1 className="font-display mt-5 text-balance text-4xl font-bold tracking-tight text-white/92 sm:text-6xl">
+              Три имени. Один подарок.
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">
-              Не «стекло ради стекла», а интерфейс‑кокпит: строгая геометрия,
-              глубокие материалы, точный свет и спортивная динамика.
+              Чистая система, мягкие материалы, много воздуха и аккуратные
+              анимации. Всё — в спокойном iOS‑подобном ритме.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -102,11 +87,11 @@ export function Landing() {
                   setSurpriseOpen(true)
                 }}
               >
-                Launch Control
+                Открыть Launch Control
               </Button>
               <a
                 href="#collab"
-                className="neon-underline rounded-full px-5 py-3 text-sm text-white/70 transition-all duration-500 ease-in-out hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                className="neon-underline rounded-[14px] px-5 py-3 text-[15px] font-semibold tracking-tight text-white/78 transition-all duration-300 ease-out hover:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-rgb)/0.35)]"
               >
                 Коллаборация
               </a>
@@ -130,7 +115,7 @@ export function Landing() {
               ].map((p) => (
                 <div
                   key={p.name}
-                  className="group glass dash-panel-sm rounded-[18px] p-6 transition-all duration-500 ease-in-out hover:-translate-y-1"
+                  className="group glass rounded-[20px] p-6 transition-all duration-300 ease-out hover:bg-white/10"
                   style={{ boxShadow: p.glow }}
                 >
                   <div className="flex items-start justify-between">

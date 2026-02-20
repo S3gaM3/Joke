@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Range } from '../../components/Range'
 
-type Accent = 'sport' | 'stealth' | 'hud'
+type Accent = 'blue' | 'indigo' | 'green' | 'red'
 
 const ACCENTS: Record<Accent, { a: string; b: string; name: string }> = {
-  sport: { a: '225 6 0', b: '0 163 224', name: 'Sport / Performance' },
-  stealth: { a: '0 163 224', b: '255 255 255', name: 'Stealth / Cold Metal' },
-  hud: { a: '255 255 255', b: '225 6 0', name: 'HUD / Warning Red' },
+  blue: { a: '10 132 255', b: '94 92 230', name: 'System Blue' },
+  indigo: { a: '94 92 230', b: '10 132 255', name: 'System Indigo' },
+  green: { a: '48 209 88', b: '10 132 255', name: 'System Green' },
+  red: { a: '255 69 58', b: '10 132 255', name: 'System Red' },
 }
 
 export function MaterialTuner() {
-  const [accent, setAccent] = useState<Accent>('sport')
-  const [glassBlur, setGlassBlur] = useState(3)
-  const [glassStrongBlur, setGlassStrongBlur] = useState(6)
+  const [accent, setAccent] = useState<Accent>('blue')
+  const [glassBlur, setGlassBlur] = useState(22)
+  const [glassStrongBlur, setGlassStrongBlur] = useState(28)
   const [gridSize, setGridSize] = useState(72)
 
   const preset = useMemo(() => ACCENTS[accent], [accent])
@@ -50,8 +51,8 @@ export function MaterialTuner() {
       <div className="mt-7 grid gap-5 lg:grid-cols-[1fr_1fr]">
         <div className="glass rounded-[18px] p-6">
           <div className="text-xs tracking-[0.25em] text-white/40">COLOR</div>
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {(['sport', 'stealth', 'hud'] as const).map((k) => {
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            {(['blue', 'indigo', 'green', 'red'] as const).map((k) => {
               const p = ACCENTS[k]
               const active = k === accent
               return (
@@ -89,7 +90,7 @@ export function MaterialTuner() {
                     </div>
                   </div>
                   <div className="mt-2 text-xs tracking-[0.22em] text-white/40">
-                    PERFORMANCE TONE
+                    SYSTEM TONE
                   </div>
                 </button>
               )
@@ -102,8 +103,8 @@ export function MaterialTuner() {
           <div className="mt-5 grid gap-4">
             <Range
               label="GLASS BLUR"
-              min={0}
-              max={10}
+              min={14}
+              max={34}
               step={1}
               value={glassBlur}
               onChange={(e) => setGlassBlur(Number(e.target.value))}
@@ -111,8 +112,8 @@ export function MaterialTuner() {
             />
             <Range
               label="GLASS STRONG BLUR"
-              min={0}
-              max={14}
+              min={18}
+              max={40}
               step={1}
               value={glassStrongBlur}
               onChange={(e) => setGlassStrongBlur(Number(e.target.value))}
