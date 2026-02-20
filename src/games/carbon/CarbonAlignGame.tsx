@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_OUT } from '../../lib/motion'
 import { clamp, randInt, sample } from '../../lib/random'
@@ -60,31 +61,33 @@ export function CarbonAlignGame() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Carbon Align">
+          Подгонка «дорогого материала»: двигайте верхний слой так, чтобы рисунок совпал.
+          Победа — почти незаметная, но идеальная. Цель: Δ ≤ 6. Двигайте медленно по 1–2px.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Carbon Align
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Подгонка “дорогого материала”: двигайте верхний слой так, чтобы
-              рисунок совпал. Победа — почти незаметная, но идеальная.
-            </p>
+            <div className="text-xs tracking-wider text-white/50">SCORE</div>
+            <div className="font-display text-lg font-semibold text-white">{score}</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">SCORE</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
-              {score}
-            </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              Δ {err.toFixed(1)}
-            </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">Δ</div>
+            <div className="font-display text-lg font-semibold text-white">{err.toFixed(1)}</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          <Button onClick={check} disabled={Boolean(result)}>Проверить</Button>
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-stretch">
-          <div className="relative overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
+      <div className="glass dash-panel hud-scan flex min-h-0 flex-1 flex-col overflow-hidden rounded-[18px] p-7">
+        <div className="flex min-h-0 flex-1 flex-col gap-5 sm:flex-row sm:items-stretch">
+          <div className="relative flex-1 overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-65"
@@ -93,7 +96,6 @@ export function CarbonAlignGame() {
                   'radial-gradient(900px 520px at 22% 0%, rgba(var(--accent2-rgb) / 0.10), transparent 60%), radial-gradient(800px 460px at 92% 15%, rgba(var(--accent-rgb) / 0.08), transparent 58%)',
               }}
             />
-
             <div className="relative grid place-items-center">
               <div className="relative h-[260px] w-[min(520px,100%)] overflow-hidden rounded-[18px] border border-white/10 bg-black/30">
                 {/* base carbon */}
@@ -163,15 +165,6 @@ export function CarbonAlignGame() {
               DRAG TO ALIGN · TARGET Δ ≤ 6
             </div>
           </div>
-
-          <div className="grid gap-3">
-            <Button onClick={check} disabled={Boolean(result)}>
-              Проверить
-            </Button>
-            <Button variant="glass" onClick={reset}>
-              Сброс
-            </Button>
-          </div>
         </div>
 
         <AnimatePresence>
@@ -191,22 +184,6 @@ export function CarbonAlignGame() {
           ) : null}
         </AnimatePresence>
       </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">DETAIL</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Дорого — когда “почти не видно”
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Идеальная подгонка материалов не кричит. Она просто ощущается ровной.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Подсказка:</span> двигайте медленно по
-          1–2px, как настройку в кокпите.
-        </div>
-      </div>
-
       <ResultPlaque
         tone={result?.tone ?? 'fail'}
         title={result?.tone === 'success' ? 'Стыковка идеальна' : 'Нюанс'}

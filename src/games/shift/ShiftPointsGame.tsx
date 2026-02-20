@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_OUT } from '../../lib/motion'
 import { clamp, sample } from '../../lib/random'
@@ -131,31 +132,38 @@ export function ShiftPointsGame() {
   }, [rpm])
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Shift Points">
+          Нажимайте SHIFT строго в зелёном окне (6200–6900 RPM). Мимо окна — промах.
+          Победа: {goal} успешных SHIFT до конца таймера.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Shift Points
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Нажимайте <span className="text-white/80">SHIFT</span> строго в
-              зелёном окне. Это игра про темп, а не про нервный спам кликов.
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">TIME</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
+            <div className="text-xs tracking-wider text-white/50">TIME</div>
+            <div className="font-display text-lg font-semibold text-white">
               {timeLeft}s
             </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              {hits}/{goal} · MISSES {misses}
-            </div>
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">{hits}/{goal} · MISSES</div>
+            <div className="font-display text-lg font-semibold text-white">{misses}</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          {mode === 'running' ? (
+            <Button onClick={onShift}>SHIFT</Button>
+          ) : (
+            <Button onClick={start}>Старт</Button>
+          )}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-center">
-          <div className="relative grid place-items-center overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
+      <div className="glass dash-panel hud-scan flex min-h-0 flex-1 flex-col gap-5 rounded-[18px] p-7 sm:flex-row sm:items-center">
+          <div className="relative flex min-h-0 flex-1 grid place-items-center overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-70"
@@ -260,40 +268,7 @@ export function ShiftPointsGame() {
               ) : null}
             </AnimatePresence>
           </div>
-
-          <div className="grid gap-3">
-            {mode === 'running' ? (
-              <Button onClick={onShift}>SHIFT</Button>
-            ) : (
-              <Button onClick={start}>Старт</Button>
-            )}
-            <Button variant="glass" onClick={reset}>
-              Сброс
-            </Button>
-          </div>
         </div>
-
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-xs tracking-[0.22em] text-white/40">
-          WINDOW {windowMin}–{windowMax} RPM · GOAL {goal} SHIFTS
-        </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">RULE</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Лови зелёную зону
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Мимо окна — считается промах. Внутри окна — переключение и ускорение
-          темпа.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Победа:</span> {goal} успешных SHIFT до
-          конца таймера.
-        </div>
-      </div>
 
       <ResultPlaque
         tone={result?.tone ?? 'fail'}

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
 import { hslToRgb, oklabDistance, rgbToHex, type Rgb } from '../../lib/color'
@@ -80,29 +81,30 @@ export function FindShadeGame() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Найди оттенок">
+          Сверху — эталон. Справа — «премиальное» колесо выбора. Поймай максимально близкий графитовый оттенок.
+          Потяните колесо (drag) и отпустите на нужном шаге.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Найди оттенок
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Сверху — эталон. Справа — «премиальное» колесо выбора. Поймай
-              максимально близкий графитовый оттенок.
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">
-              PRECISION
-            </div>
-            <div className="font-display mt-1 text-sm tracking-tight text-white/75">
+            <div className="text-xs tracking-wider text-white/50">PRECISION</div>
+            <div className="font-display text-lg font-semibold text-white">
               {(Math.max(0, 1 - distance * 10) * 100).toFixed(0)}%
             </div>
           </div>
         </div>
+        <div className="flex gap-2">
+          <Button onClick={check} disabled={Boolean(result)}>Проверить</Button>
+          <Button variant="glass" onClick={reset}>Новый эталон</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 grid gap-4 sm:grid-cols-2">
+      <div className="glass flex min-h-0 flex-1 flex-col gap-4 overflow-auto rounded-[18px] p-7 sm:flex-row">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 sm:flex-row sm:flex-wrap">
           <div className="glass rounded-[18px] p-5">
             <div className="text-xs tracking-[0.25em] text-white/40">
               ЭТАЛОН
@@ -154,34 +156,15 @@ export function FindShadeGame() {
           </div>
         </div>
 
-        <div className="mt-7 flex flex-wrap items-center gap-3">
-          <Button onClick={check} disabled={Boolean(result)}>
-            Проверить
-          </Button>
-          <Button variant="glass" onClick={reset}>
-            Новый эталон
-          </Button>
-          <div className="ml-auto text-sm text-white/55">
-            {hint ? (
-              <span className="font-display tracking-tight">{hint}</span>
-            ) : (
-              <span className="text-white/35">Подсказка появится здесь.</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="glass rounded-[18px] p-7">
-        <div className="flex items-center justify-between">
-          <div className="text-xs tracking-[0.25em] text-white/40">
-            WHEEL DIAL
-          </div>
-          <div className="text-xs tracking-[0.25em] text-white/35">
-            STEP {selectedIndex + 1}/{steps}
-          </div>
+        <div className="mt-4 flex items-center gap-4 text-sm text-white/55">
+          {hint ? (
+            <span className="font-display tracking-tight">{hint}</span>
+          ) : (
+            <span className="text-white/35">Подсказка появится здесь.</span>
+          )}
         </div>
 
-        <div className="mt-6 grid place-items-center">
+        <div className="mt-6 grid flex-1 place-items-center">
           <div className="relative">
             <div
               aria-hidden
@@ -265,10 +248,6 @@ export function FindShadeGame() {
               </motion.div>
             </div>
           </div>
-        </div>
-
-        <div className="mt-6 text-center text-xs leading-relaxed text-white/45">
-          Потяните колесо (drag) и отпустите на нужном шаге.
         </div>
       </div>
 

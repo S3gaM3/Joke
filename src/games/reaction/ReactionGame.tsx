@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
 import { clamp, randInt, sample, uid } from '../../lib/random'
@@ -271,40 +272,46 @@ export function ReactionGame() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Реакция">
+          Иконки появляются и исчезают всё быстрее. Успейте нажать. {goal} попаданий за 30 секунд.
+          Чем выше счёт, тем короче «окно» появления. Кликайте уверенно, без «дёрганья» мыши.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Реакция
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Иконки появляются и исчезают всё быстрее. Успейте нажать. Скорость
-              растёт с каждым попаданием.
-            </p>
+            <div className="text-xs tracking-wider text-white/50">TIME</div>
+            <div className="font-display text-lg font-semibold text-white">{timeLeft}s</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">TIME</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/80">
-              {timeLeft}s
-            </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              SCORE {score}/{goal}
-            </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              MISSES {misses}
-            </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">SCORE</div>
+            <div className="font-display text-lg font-semibold text-white">{score}/{goal}</div>
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">MISSES</div>
+            <div className="font-display text-lg font-semibold text-white">{misses}</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          {mode === 'running' ? (
+            <Button variant="glass" onClick={reset}>Стоп</Button>
+          ) : (
+            <Button onClick={start}>Старт</Button>
+          )}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div
-          ref={arenaRef}
-          className="mt-7 relative h-[360px] overflow-hidden rounded-[18px] border border-white/12 bg-white/3"
-          style={{
-            boxShadow:
-              'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 30px 90px rgba(0,0,0,0.65)',
-          }}
-        >
+      <div
+        ref={arenaRef}
+        className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[18px] border border-white/12 bg-white/3"
+        style={{
+          boxShadow:
+            'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 30px 90px rgba(0,0,0,0.65)',
+        }}
+      >
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-70"
@@ -423,40 +430,6 @@ export function ReactionGame() {
               />
             ) : null}
           </AnimatePresence>
-        </div>
-
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          {mode === 'running' ? (
-            <Button variant="glass" onClick={reset}>
-              Стоп
-            </Button>
-          ) : (
-            <Button onClick={start}>Старт</Button>
-          )}
-          <Button variant="glass" onClick={reset}>
-            Сброс
-          </Button>
-
-          <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
-            SPEED {Math.round(clamp(900 - score * 28, 320, 900))}ms
-          </div>
-        </div>
-      </div>
-
-      <div className="glass rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">RULE</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          {goal} попаданий за 30 секунд
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Чем выше счёт, тем короче «окно» появления. Движения и анимации
-          специально мягкие — как в дорогом интерфейсе.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Подсказка:</span> кликайте уверенно,
-          без «дёрганья» мыши — это быстрее.
-        </div>
       </div>
 
       <ResultPlaque

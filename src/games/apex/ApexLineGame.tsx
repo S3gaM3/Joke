@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
 import { clamp, sample } from '../../lib/random'
@@ -122,32 +123,41 @@ export function ApexLineGame() {
   }, [deviation, idx])
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Apex Line">
+          Зажмите и ведите курсор по контрольным точкам траектории. Линия — это дисциплина.
+          Победа: пройти все точки за 30 секунд. Двигайтесь без рывков.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Apex Line
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Зажмите и ведите курсор по контрольным точкам траектории — от
-              старта к апексу и дальше. Это не «рисовалка», а ощущение линии.
-            </p>
+            <div className="text-xs tracking-wider text-white/50">TIME</div>
+            <div className="font-display text-lg font-semibold text-white">{timeLeft}s</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">TIME</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
-              {timeLeft}s
-            </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              {idx}/{CHECKPOINTS.length} · SCORE {score}
-            </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">SCORE</div>
+            <div className="font-display text-lg font-semibold text-white">{score}</div>
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">DEVIATION</div>
+            <div className="font-display text-lg font-semibold text-white">{deviation}</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          {mode === 'running' ? (
+            <Button variant="glass" onClick={reset}>Стоп</Button>
+          ) : (
+            <Button onClick={start}>Старт</Button>
+          )}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div
-          ref={arenaRef}
-          className="mt-7 relative h-[360px] overflow-hidden rounded-[18px] border border-white/12 bg-white/3"
+      <div
+        ref={arenaRef}
+        className="relative flex min-h-0 flex-1 overflow-hidden rounded-[18px] border border-white/12 bg-white/3"
           style={{
             boxShadow:
               'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 30px 90px rgba(0,0,0,0.65)',
@@ -252,38 +262,6 @@ export function ApexLineGame() {
               </motion.div>
             ) : null}
           </AnimatePresence>
-        </div>
-
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          {mode === 'running' ? (
-            <Button variant="glass" onClick={reset}>
-              Стоп
-            </Button>
-          ) : (
-            <Button onClick={start}>Старт</Button>
-          )}
-          <Button variant="glass" onClick={reset}>
-            Сброс
-          </Button>
-          <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
-            DEVIATION {deviation}
-          </div>
-        </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">RULE</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Линия — это дисциплина
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Двигайтесь по точкам без рывков. Система мягко штрафует “сильный уход”.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Победа:</span> пройти все точки за 30
-          секунд.
-        </div>
       </div>
 
       <ResultPlaque

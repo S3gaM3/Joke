@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
 import { clamp, randInt, sample } from '../../lib/random'
@@ -105,34 +106,37 @@ export function LaunchControlGame() {
   }, [best])
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Launch Control">
+          Нажмите, когда увидите GO. Фальстарт — нажатие раньше. 6 попыток, лучшее время — Best.
+          Стабильность важнее одного «супер‑клика».
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Launch Control
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Нажмите, когда увидите <span className="text-white/80">GO</span>.
-              Если нажать раньше — это «фальстарт». Идеальный старт выглядит
-              спокойно.
-            </p>
+            <div className="text-xs tracking-wider text-white/50">BEST</div>
+            <div className="font-display text-lg font-semibold text-white">{scoreLabel}</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">BEST</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
-              {scoreLabel}
-            </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              LEFT {left}/{attempts}
-            </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">LEFT</div>
+            <div className="font-display text-lg font-semibold text-white">{left}/{attempts}</div>
           </div>
         </div>
-
-        <button
+        <div className="flex gap-2">
+          {readyToArm && !finished ? (
+            <Button onClick={arm}>Старт</Button>
+          ) : (
+            <Button variant="glass" onClick={arm} disabled>Старт</Button>
+          )}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
+      <button
           type="button"
           onClick={onTap}
-          className="mt-7 relative grid h-[280px] w-full place-items-center overflow-hidden rounded-[18px] border border-white/12 bg-white/3 text-left transition-all duration-500 ease-in-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+          className="relative flex min-h-0 flex-1 place-items-center overflow-hidden rounded-xl border border-white/12 bg-white/3 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
           style={{
             boxShadow:
               'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 30px 90px rgba(0,0,0,0.65)',
@@ -233,27 +237,8 @@ export function LaunchControlGame() {
             />
           </motion.div>
         </button>
-
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          {readyToArm && !finished ? (
-            <Button onClick={arm}>Старт</Button>
-          ) : (
-            <Button variant="glass" onClick={arm} disabled>
-              Старт
-            </Button>
-          )}
-          <Button variant="glass" onClick={reset}>
-            Сброс
-          </Button>
-
-          <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
-            WINDOW {clamp(950 - (best ?? 0) * 0, 320, 950)}ms
-          </div>
-        </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">TIP</div>
+      {null && <div>
+        <div className="text-xs">TIP</div>
         <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
           Стабильность важнее одного «супер‑клика»
         </div>
@@ -266,7 +251,7 @@ export function LaunchControlGame() {
           <span className="text-white/70">Режим:</span> 6 попыток. Лучшее время
           фиксируется как “Best”.
         </div>
-      </div>
+      </div>}
 
       <ResultPlaque
         tone={result?.tone ?? 'fail'}

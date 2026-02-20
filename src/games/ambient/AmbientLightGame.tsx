@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
 import { hslToRgb, oklabDistance, rgbToHex } from '../../lib/color'
@@ -67,30 +68,34 @@ export function AmbientLightGame() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Ambient Light">
+          Настройте полосу подсветки: оттенок (колесо) + яркость (ползунок). Попадите как можно ближе к эталону.
+          Победа: Δ ≤ 0.030. Подсветка — это характер.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Ambient Light
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Настройте «полосу подсветки» как в премиум‑кокпите: оттенок (колесо)
-              + яркость (ползунок). Попадите как можно ближе к эталону.
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">MATCH</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
+            <div className="text-xs tracking-wider text-white/50">MATCH</div>
+            <div className="font-display text-lg font-semibold text-white">
               {(Math.max(0, 1 - dist * 10) * 100).toFixed(0)}%
             </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              Δ {dist.toFixed(3)}
-            </div>
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">Δ</div>
+            <div className="font-display text-lg font-semibold text-white">{dist.toFixed(3)}</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          <Button onClick={check} disabled={Boolean(result)}>Проверить</Button>
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 grid gap-4 sm:grid-cols-2">
+      <div className="glass dash-panel hud-scan flex min-h-0 flex-1 flex-col overflow-auto rounded-[18px] p-7">
+        <div className="grid flex-1 gap-4 sm:grid-cols-2">
           <div className="glass dash-panel-sm rounded-[18px] p-5">
             <div className="text-xs tracking-[0.25em] text-white/40">TARGET</div>
             <div className="mt-3 flex items-center gap-4">
@@ -231,31 +236,6 @@ export function AmbientLightGame() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Button onClick={check} disabled={Boolean(result)}>
-              Проверить
-            </Button>
-            <Button variant="glass" onClick={reset}>
-              Сброс
-            </Button>
-            <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
-              NUANCE TEST
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">NOTE</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Подсветка — это характер
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Тут важен не «ярко», а «точно». Крутите оттенок и чуть меняйте яркость.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Победа:</span> Δ ≤ 0.030.
         </div>
       </div>
 

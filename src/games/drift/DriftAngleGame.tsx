@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { EASE_IN_OUT } from '../../lib/motion'
 import { clamp, sample } from '../../lib/random'
@@ -129,30 +130,39 @@ export function DriftAngleGame() {
   }, [target])
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Drift Angle">
+          Держите угол в «окне» (±3°). Окно ±3° — идеал. Победа: score ≥ 280 за 45 секунд.
+          Система начисляет очки каждую секунду. Управление — ползунок.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Drift Angle
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Держите угол в «окне» (±3°). Управление — ползунок как в
-              премиум‑панели.
-            </p>
+            <div className="text-xs tracking-wider text-white/50">TIME</div>
+            <div className="font-display text-lg font-semibold text-white">{timeLeft}s</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">TIME</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
-              {timeLeft}s
-            </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              SCORE {score} · STREAK {streak}
-            </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">SCORE</div>
+            <div className="font-display text-lg font-semibold text-white">{score}</div>
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">STREAK</div>
+            <div className="font-display text-lg font-semibold text-white">{streak}</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          {mode === 'running' ? (
+            <Button variant="glass" onClick={reset}>Стоп</Button>
+          ) : (
+            <Button onClick={start}>Старт</Button>
+          )}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div className="glass dash-panel hud-scan flex min-h-0 flex-1 flex-col gap-5 overflow-hidden rounded-[18px] p-7 sm:flex-row sm:items-center">
           <div className="relative overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
             <div
               aria-hidden
@@ -254,21 +264,7 @@ export function DriftAngleGame() {
             </div>
           </div>
 
-          <div className="grid gap-3">
-            {mode === 'running' ? (
-              <Button variant="glass" onClick={reset}>
-                Стоп
-              </Button>
-            ) : (
-              <Button onClick={start}>Старт</Button>
-            )}
-            <Button variant="glass" onClick={reset}>
-              Сброс
-            </Button>
-          </div>
-        </div>
-
-        <div className="mt-5 rounded-[18px] border border-white/12 bg-white/4 px-6 py-5">
+        <div className="mt-5 shrink-0 rounded-[18px] border border-white/12 bg-white/4 px-6 py-5">
           <div className="flex items-end justify-between gap-4">
             <div className="text-xs tracking-[0.25em] text-white/45">CONTROL</div>
             <div className="font-display text-xs tracking-[0.22em] text-white/55">
@@ -285,21 +281,6 @@ export function DriftAngleGame() {
             disabled={mode !== 'running'}
             className="mt-3 h-9 w-full cursor-pointer appearance-none bg-transparent focus-visible:outline-none disabled:opacity-60"
           />
-        </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">RULE</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Окно ±3° — идеал
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Система начисляет очки каждую секунду. Чем чаще вы в окне — тем выше
-          итог.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Победа:</span> score ≥ 280 за 45 секунд.
         </div>
       </div>
 

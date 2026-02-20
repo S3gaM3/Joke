@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_OUT } from '../../lib/motion'
 import { clamp, randInt, sample } from '../../lib/random'
@@ -148,31 +149,39 @@ export function ParkingSensorGame() {
   }, [cm, mode])
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="Parking Sensor">
+          Стоп‑тайминг как в премиум‑парктронике: нажмите BRAKE в зелёной зоне 15–25cm.
+          Победа: средняя ошибка ≤ 10cm. Мягко — значит точно.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              Parking Sensor
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Стоп‑тайминг как в премиум‑парктронике: нажмите{' '}
-              <span className="text-white/80">BRAKE</span> в зелёной зоне
-              15–25cm.
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">ROUND</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
+            <div className="text-xs tracking-wider text-white/50">ROUND</div>
+            <div className="font-display text-lg font-semibold text-white">
               {Math.min(round + (mode === 'running' ? 1 : 0), rounds)}/{rounds}
             </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              AVG {avgError == null ? '—' : `${avgError}cm`}
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">AVG</div>
+            <div className="font-display text-lg font-semibold text-white">
+              {avgError == null ? '—' : `${avgError}cm`}
             </div>
           </div>
         </div>
+        <div className="flex gap-2">
+          {mode === 'idle' ? (
+            <Button onClick={start}>Старт</Button>
+          ) : (
+            <Button onClick={() => stop(false)} disabled={mode !== 'running'}>BRAKE</Button>
+          )}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 rounded-[18px] border border-white/12 bg-white/3 p-6">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
           <div className="flex items-center justify-between">
             <div className="text-xs tracking-[0.25em] text-white/40">
               DISTANCE
@@ -254,37 +263,10 @@ export function ParkingSensorGame() {
             })}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            {mode === 'idle' ? (
-              <Button onClick={start}>Старт</Button>
-            ) : (
-              <Button onClick={() => stop(false)} disabled={mode !== 'running'}>
-                BRAKE
-              </Button>
-            )}
-            <Button variant="glass" onClick={reset}>
-              Сброс
-            </Button>
-            <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
-              TARGET {targetMin}–{targetMax}cm
-            </div>
+          <div className="mt-auto pt-4 text-xs tracking-[0.22em] text-white/40">
+            TARGET {targetMin}–{targetMax}cm
           </div>
         </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">NOTE</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Мягко — значит точно
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Это игра про ощущение дистанции: без паники, без «дёрганья».
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Победа:</span> средняя ошибка ≤ 10cm.
-        </div>
-      </div>
 
       <ResultPlaque
         tone={result?.tone ?? 'fail'}

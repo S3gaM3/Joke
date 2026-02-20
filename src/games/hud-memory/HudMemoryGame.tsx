@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
+import { GameRulesPopover } from '../../components/GameRulesPopover'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { EASE_IN_OUT } from '../../lib/motion'
 import { randInt, sample } from '../../lib/random'
@@ -135,30 +136,33 @@ export function HudMemoryGame() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_420px]">
-      <div className="glass dash-panel hud-scan rounded-[18px] p-7">
-        <div className="flex flex-wrap items-start justify-between gap-6">
+    <div className="relative flex min-h-0 flex-1 flex-col p-4 lg:p-6">
+      <div className="absolute right-4 top-4 z-10 lg:right-6 lg:top-6">
+        <GameRulesPopover title="HUD Memory">
+          Система показывает последовательность световых сегментов. Повторите её.
+          3 раунда, до 3 ошибок. Смотрите ритм, а не отдельные вспышки.
+        </GameRulesPopover>
+      </div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <div>
-            <div className="font-display text-lg font-semibold tracking-tight text-white/90">
-              HUD Memory
-            </div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">
-              Система показывает последовательность световых сегментов. Повторите
-              её. 3 раунда, до 3 ошибок.
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-xs tracking-[0.25em] text-white/40">ROUND</div>
-            <div className="font-display mt-1 text-xl font-semibold text-white/85">
+            <div className="text-xs tracking-wider text-white/50">ROUND</div>
+            <div className="font-display text-lg font-semibold text-white">
               {Math.min(round + 1, roundLens.length)}/{roundLens.length}
             </div>
-            <div className="mt-2 text-xs tracking-[0.25em] text-white/40">
-              ERR {errors}/3
-            </div>
+          </div>
+          <div>
+            <div className="text-xs tracking-wider text-white/50">ERR</div>
+            <div className="font-display text-lg font-semibold text-white">{errors}/3</div>
           </div>
         </div>
+        <div className="flex gap-2">
+          {mode === 'idle' ? <Button onClick={start}>Старт</Button> : null}
+          <Button variant="glass" onClick={reset}>Сброс</Button>
+        </div>
+      </div>
 
-        <div className="mt-7 rounded-[18px] border border-white/12 bg-white/3 p-6">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[18px] border border-white/12 bg-white/3 p-6">
           <div className="flex items-center justify-between">
             <div className="text-xs tracking-[0.25em] text-white/40">SEQUENCE</div>
             <div className="text-xs tracking-[0.25em] text-white/35">
@@ -209,31 +213,10 @@ export function HudMemoryGame() {
             })}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            {mode === 'idle' ? <Button onClick={start}>Старт</Button> : null}
-            <Button variant="glass" onClick={reset}>
-              Сброс
-            </Button>
-            <div className="ml-auto text-xs tracking-[0.22em] text-white/40">
-              {mode === 'show' ? 'WATCH ONLY' : 'TOUCH INPUT'}
-            </div>
+          <div className="mt-auto pt-4 text-xs tracking-[0.22em] text-white/40">
+            {mode === 'show' ? 'WATCH ONLY' : 'TOUCH INPUT'}
           </div>
         </div>
-      </div>
-
-      <div className="glass dash-panel rounded-[18px] p-7">
-        <div className="text-xs tracking-[0.25em] text-white/40">TIP</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Смотрите ритм, а не отдельные вспышки
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Премиальный HUD всегда ритмичен. Повторите рисунок — спокойно и точно.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Проигрыш:</span> 3 ошибки.
-        </div>
-      </div>
 
       <ResultPlaque
         tone={result?.tone ?? 'fail'}
