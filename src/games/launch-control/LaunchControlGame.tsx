@@ -237,21 +237,6 @@ export function LaunchControlGame() {
             />
           </motion.div>
         </button>
-      {false && <div>
-        <div className="text-xs">TIP</div>
-        <div className="mt-3 font-display text-base font-semibold tracking-tight text-white/88">
-          Стабильность важнее одного «супер‑клика»
-        </div>
-        <p className="mt-3 text-sm leading-relaxed text-white/60">
-          Не ловите пик эмоций. Просто ждите GO и нажимайте уверенно. Это
-          ощущается дороже.
-        </p>
-        <div className="mt-6 h-px w-full chrome-line opacity-35" />
-        <div className="mt-5 text-sm leading-relaxed text-white/55">
-          <span className="text-white/70">Режим:</span> 6 попыток. Лучшее время
-          фиксируется как “Best”.
-        </div>
-      </div>}
 
       <ResultPlaque
         tone={result?.tone ?? 'fail'}
@@ -269,4 +254,3 @@ export function LaunchControlGame() {
     </div>
   )
 }
-
