@@ -129,19 +129,18 @@ export function ComposeLinesGame() {
   useEffect(() => {
     if (mode !== 'running') return
     const endAt = performance.now() + 22_000
+    let ended = false
     const int = window.setInterval(() => {
       const sec = Math.max(0, Math.ceil((endAt - performance.now()) / 1000))
       setTimeLeft(sec)
+      if (!ended && sec <= 0) {
+        ended = true
+        setMode('lost')
+        setResult({ tone: 'fail', msg: sample(LOSE_MESSAGES) })
+      }
     }, 120)
     return () => window.clearInterval(int)
   }, [mode])
-
-  useEffect(() => {
-    if (mode !== 'running') return
-    if (timeLeft > 0) return
-    setMode('lost')
-    setResult({ tone: 'fail', msg: sample(LOSE_MESSAGES) })
-  }, [mode, timeLeft])
 
   useEffect(() => {
     if (mode !== 'running') return
@@ -166,31 +165,34 @@ export function ComposeLinesGame() {
     return () => window.cancelAnimationFrame(raf)
   }, [dims.ah, dims.aw, mode])
 
-  useEffect(() => {
-    if (mode !== 'running') return
-    const done = lines.length > 0 && lines.every((l) => l.captured)
-    if (!done) return
-    setMode('won')
-    setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
-  }, [lines, mode])
-
   const onLineClick = (id: string) => {
     if (mode !== 'running') return
-    setLines((prev) =>
-      prev.map((ln) => {
-        if (ln.id !== id || ln.captured) return ln
+    let hit = false
+    let win = false
+    setLines((prev) => {
+      const next = prev.map((ln) => {
+        const isThis = ln.id === id
+        if (!isThis || ln.captured) {
+          return ln
+        }
         const tx = ln.target.x * dims.aw
         const ty = ln.target.y * dims.ah
         const d = Math.hypot(ln.x - tx, ln.y - ty)
         const r = angleDiff(ln.rot, ln.target.rot)
         const ok = d <= 16 && r <= 10
-        if (!ok) {
-          setMisses((m) => m + 1)
-          return ln
-        }
+        if (!ok) return ln
+        hit = true
         return { ...ln, captured: true, x: tx, y: ty, rot: ln.target.rot }
-      }),
-    )
+      })
+      const capturedCount = next.reduce((acc, ln) => acc + (ln.captured ? 1 : 0), 0)
+      win = hit && capturedCount === next.length
+      return next
+    })
+    if (!hit) setMisses((m) => m + 1)
+    if (win) {
+      setMode('won')
+      setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
+    }
   }
 
   return (

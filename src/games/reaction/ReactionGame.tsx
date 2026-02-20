@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../components/Button'
 import { ResultPlaque } from '../../features/surprise/ResultPlaque'
 import { DUR, EASE_IN_OUT, EASE_OUT } from '../../lib/motion'
@@ -102,6 +102,7 @@ export function ReactionGame() {
   const modeRef = useRef<Mode>('idle')
   const [timeLeft, setTimeLeft] = useState(30)
   const [score, setScore] = useState(0)
+  const scoreRef = useRef(0)
   const [misses, setMisses] = useState(0)
   const [target, setTarget] = useState<Target | null>(null)
   const [result, setResult] = useState<null | { tone: 'success' | 'fail'; msg: string }>(
@@ -118,10 +119,15 @@ export function ReactionGame() {
   }, [w, h])
 
   const timeoutRef = useRef<number | null>(null)
+  const finishedRef = useRef(false)
 
   useEffect(() => {
     modeRef.current = mode
   }, [mode])
+
+  useEffect(() => {
+    scoreRef.current = score
+  }, [score])
 
   const clearTimers = () => {
     if (timeoutRef.current) {
@@ -147,6 +153,34 @@ export function ReactionGame() {
     }, ttl)
   }
 
+  const finish = useCallback((tone: 'success' | 'fail') => {
+    if (finishedRef.current) return
+    finishedRef.current = true
+    clearTimers()
+    setTarget(null)
+    setMode(tone === 'success' ? 'won' : 'lost')
+    setResult({
+      tone,
+      msg: sample(tone === 'success' ? WIN_MESSAGES : LOSE_MESSAGES),
+    })
+
+    if (tone === 'success') {
+      const cx = Math.round(dims.aw * 0.5)
+      const cy = Math.round(dims.ah * 0.5)
+      const kinds: IconKind[] = ['star', 'diamond', 'bulb']
+      const b = Array.from({ length: 16 }, (_, i) => ({
+        id: uid(`b${i}`),
+        x: cx + randInt(-40, 40),
+        y: cy + randInt(-30, 30),
+        k: kinds[randInt(0, 2)]!,
+      }))
+      setBurst(b)
+      window.setTimeout(() => setBurst([]), 1300)
+    } else {
+      setBurst([])
+    }
+  }, [dims.ah, dims.aw])
+
   const start = () => {
     setResult(null)
     setMode('running')
@@ -154,6 +188,7 @@ export function ReactionGame() {
     setScore(0)
     setMisses(0)
     setBurst([])
+    finishedRef.current = false
     spawn(0)
   }
 
@@ -166,6 +201,7 @@ export function ReactionGame() {
     setScore(0)
     setMisses(0)
     setBurst([])
+    finishedRef.current = false
   }
 
   useEffect(() => {
@@ -175,51 +211,17 @@ export function ReactionGame() {
   useEffect(() => {
     if (mode !== 'running') return
     const endAt = performance.now() + 30_000
+    let ended = false
     const int = window.setInterval(() => {
       const sec = Math.max(0, Math.ceil((endAt - performance.now()) / 1000))
       setTimeLeft(sec)
+      if (!ended && sec <= 0) {
+        ended = true
+        finish(scoreRef.current >= goal ? 'success' : 'fail')
+      }
     }, 120)
     return () => window.clearInterval(int)
-  }, [mode])
-
-  useEffect(() => {
-    if (mode !== 'running') return
-    if (timeLeft > 0) return
-    clearTimers()
-    setTarget(null)
-    if (score >= goal) {
-      setMode('won')
-      setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
-    } else {
-      setMode('lost')
-      setResult({ tone: 'fail', msg: sample(LOSE_MESSAGES) })
-    }
-  }, [goal, mode, score, timeLeft])
-
-  useEffect(() => {
-    if (mode !== 'running') return
-    if (score < goal) return
-    clearTimers()
-    setTarget(null)
-    setMode('won')
-    setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
-  }, [goal, mode, score])
-
-  useEffect(() => {
-    if (mode !== 'won') return
-    const cx = Math.round(dims.aw * 0.5)
-    const cy = Math.round(dims.ah * 0.5)
-    const kinds: IconKind[] = ['star', 'diamond', 'bulb']
-    const b = Array.from({ length: 16 }, (_, i) => ({
-      id: uid(`b${i}`),
-      x: cx + randInt(-40, 40),
-      y: cy + randInt(-30, 30),
-      k: kinds[randInt(0, 2)]!,
-    }))
-    setBurst(b)
-    const t = window.setTimeout(() => setBurst([]), 1300)
-    return () => window.clearTimeout(t)
-  }, [dims.ah, dims.aw, mode])
+  }, [finish, goal, mode])
 
   const onHit = () => {
     if (mode !== 'running') return
@@ -227,6 +229,11 @@ export function ReactionGame() {
     setTarget(null)
     setScore((s) => {
       const ns = s + 1
+      scoreRef.current = ns
+      if (ns >= goal) {
+        finish('success')
+        return ns
+      }
       window.setTimeout(() => {
         if (modeRef.current === 'running') spawn(ns)
       }, 120)
