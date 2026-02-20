@@ -62,7 +62,7 @@ export function SurpriseDialog({
                 className="pointer-events-none absolute inset-0 opacity-60"
                 style={{
                   background:
-                    'radial-gradient(900px 460px at 25% 0%, rgba(177,140,255,0.18), transparent 60%), radial-gradient(760px 420px at 90% 10%, rgba(66,229,255,0.14), transparent 58%)',
+                    'radial-gradient(900px 460px at 25% 0%, rgba(var(--accent2-rgb) / 0.12), transparent 60%), radial-gradient(760px 420px at 90% 10%, rgba(var(--accent-rgb) / 0.10), transparent 58%)',
                 }}
               />
 
@@ -102,7 +102,7 @@ export function SurpriseDialog({
                         <Tabs.Trigger
                           key={tab.v}
                           value={tab.v}
-                          className="rounded-full border border-white/14 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-500 ease-in-out hover:border-white/22 hover:bg-white/7 hover:text-white/88 data-[state=active]:border-[rgba(66,229,255,0.42)] data-[state=active]:bg-white/8 data-[state=active]:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                          className="rounded-full border border-white/14 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-500 ease-in-out hover:border-white/22 hover:bg-white/7 hover:text-white/88 data-[state=active]:border-[rgba(var(--accent2-rgb)/0.46)] data-[state=active]:bg-white/8 data-[state=active]:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
                         >
                           <span className="font-display tracking-tight">
                             {tab.t}

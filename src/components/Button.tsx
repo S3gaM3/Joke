@@ -15,7 +15,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const styles =
     variant === 'glass'
       ? 'border border-white/14 bg-white/5 text-white/80 hover:bg-white/7 hover:border-white/22'
-      : 'border border-white/16 bg-white/8 text-white/85 hover:border-[rgba(66,229,255,0.45)] hover:bg-white/10'
+      : 'border border-white/16 bg-white/8 text-white/85 hover:border-[rgba(var(--accent2-rgb)/0.45)] hover:bg-white/10'
 
   return (
     <button

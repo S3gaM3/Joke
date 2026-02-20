@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
-/* Design tokens: premium dark / graphite / chrome / neon */
+/* Design tokens: sporty premium (metal / carbon / HUD) */
 :root {
   color-scheme: dark;
 
   --bg-0: #05070a; /* deep black */
-  --bg-1: #0a0f14; /* graphite */
-  --bg-2: #0f151c; /* wet asphalt */
+  --bg-1: #080b10; /* graphite */
+  --bg-2: #0c1119; /* wet asphalt */
+  --bg-3: #101827; /* deep instrument blue-black */
 
   --fg-0: rgba(255, 255, 255, 0.92);
   --fg-1: rgba(255, 255, 255, 0.78);
@@ -18,27 +19,35 @@
   --chrome-0: rgba(255, 255, 255, 0.86);
   --chrome-1: rgba(210, 220, 230, 0.7);
 
-  --neon-cyan: #42e5ff;
-  --neon-violet: #b18cff;
-  --neon-amber: #ffd28a;
-
-  --accent-rgb: 66 229 255;
-  --accent2-rgb: 177 140 255;
+  /* Performance accents (sporty, aggressive) */
+  --accent-rgb: 225 6 0; /* red */
+  --accent2-rgb: 0 163 224; /* blue */
+  --accent3-rgb: 0 94 184; /* deep blue */
   --accent: rgb(var(--accent-rgb));
   --accent2: rgb(var(--accent2-rgb));
+  --accent3: rgb(var(--accent3-rgb));
 
-  --glass-blur: 14px;
-  --glass-strong-blur: 18px;
-  --grid-size: 64px;
+  /* "Glass" is kept but tuned away from frosted-cheap look */
+  --glass-blur: 3px;
+  --glass-strong-blur: 6px;
+  --grid-size: 72px;
 
   --glass: rgba(255, 255, 255, 0.06);
   --glass-2: rgba(255, 255, 255, 0.085);
   --glass-3: rgba(255, 255, 255, 0.12);
 
-  --shadow-0: 0 0 0 1px var(--stroke-0), 0 18px 55px rgba(0, 0, 0, 0.65);
-  --shadow-1: 0 0 0 1px var(--stroke-1), 0 28px 85px rgba(0, 0, 0, 0.72);
-  --glow-cyan: 0 0 0 1px rgba(66, 229, 255, 0.25), 0 0 22px rgba(66, 229, 255, 0.22);
-  --glow-violet: 0 0 0 1px rgba(177, 140, 255, 0.22), 0 0 26px rgba(177, 140, 255, 0.18);
+  --panel-0: rgba(10, 12, 15, 0.86);
+  --panel-1: rgba(16, 18, 22, 0.76);
+  --panel-2: rgba(18, 22, 28, 0.68);
+
+  --shadow-0: 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 14px 44px rgba(0, 0, 0, 0.72);
+  --shadow-1: 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 26px 80px rgba(0, 0, 0, 0.78);
+  --glow-accent: 0 0 0 1px rgba(var(--accent2-rgb) / 0.22),
+    0 0 28px rgba(var(--accent2-rgb) / 0.16);
+  --glow-danger: 0 0 0 1px rgba(var(--accent-rgb) / 0.22),
+    0 0 28px rgba(var(--accent-rgb) / 0.16);
 
   --radius-lg: 22px;
   --radius-md: 16px;
@@ -62,14 +71,16 @@ body {
 
 body {
   margin: 0;
-  background: radial-gradient(1200px 900px at 20% -10%, rgba(177, 140, 255, 0.14), transparent 60%),
-    radial-gradient(900px 700px at 90% 10%, rgba(66, 229, 255, 0.12), transparent 55%),
-    linear-gradient(180deg, var(--bg-0), var(--bg-2));
+  background:
+    radial-gradient(900px 520px at 22% -10%, rgba(var(--accent2-rgb) / 0.10), transparent 60%),
+    radial-gradient(780px 420px at 95% 10%, rgba(var(--accent-rgb) / 0.10), transparent 60%),
+    radial-gradient(1200px 900px at 50% 0%, rgba(255, 255, 255, 0.04), transparent 70%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-3));
   color: var(--fg-0);
 }
 
 ::selection {
-  background: rgba(66, 229, 255, 0.22);
+  background: rgba(var(--accent2-rgb) / 0.24);
 }
 
 /* Subtle scrollbar like premium UI */
@@ -151,8 +162,11 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .glass {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
-  border: 1px solid var(--stroke-0);
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    linear-gradient(180deg, var(--panel-0), var(--panel-2));
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-0);
   backdrop-filter: blur(var(--glass-blur));
@@ -160,16 +174,57 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .glass-strong {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
-  border: 1px solid var(--stroke-1);
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    linear-gradient(180deg, rgba(8, 10, 12, 0.92), rgba(14, 18, 22, 0.78));
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
   backdrop-filter: blur(var(--glass-strong-blur));
   -webkit-backdrop-filter: blur(var(--glass-strong-blur));
 }
 
+/* Metallic edge highlight + subtle grain (kills cheap "frosted" look) */
+.glass::before,
+.glass-strong::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.02) 40%,
+      rgba(255, 255, 255, 0.10) 60%,
+      rgba(255, 255, 255, 0.02) 80%
+    );
+  opacity: 0.28;
+  mix-blend-mode: screen;
+}
+.glass::after,
+.glass-strong::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+}
+
 .chrome-line {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    rgba(var(--accent2-rgb) / 0.22),
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
 }
 
 .neon-underline {
@@ -225,38 +280,54 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .bg-grid {
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.06) 1px,
-      transparent 1px
+  /* carbon-like weave */
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045) 0px,
+      rgba(255, 255, 255, 0.045) 2px,
+      transparent 2px,
+      transparent 10px
     ),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.0) 0px,
+      rgba(0, 0, 0, 0.0) 8px,
+      rgba(255, 255, 255, 0.025) 8px,
+      rgba(255, 255, 255, 0.025) 10px
+    );
+  background-size: calc(var(--grid-size) * 0.9) calc(var(--grid-size) * 0.9);
   mask-image: radial-gradient(
     900px 640px at 50% 20%,
     rgba(0, 0, 0, 0.9),
     transparent 70%
   );
-  opacity: 0.5;
-  animation: drift-y 10s linear infinite alternate;
+  opacity: 0.42;
+  animation: drift-y 12s linear infinite alternate;
 }
 
 .bg-lines {
-  background-image: linear-gradient(
+  /* diagonal reflections / HUD streaks */
+  background-image:
+    repeating-linear-gradient(
       120deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.06) 28%,
-      rgba(var(--accent-rgb) / 0.08) 50%,
-      rgba(255, 255, 255, 0.04) 62%,
-      transparent 100%
+      transparent 16px,
+      rgba(255, 255, 255, 0.035) 16px,
+      rgba(255, 255, 255, 0.035) 17px,
+      transparent 17px,
+      transparent 44px
     ),
-    radial-gradient(
-      900px 520px at 70% 12%,
-      rgba(var(--accent2-rgb) / 0.1),
-      transparent 65%
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(var(--accent2-rgb) / 0.08) 42%,
+      rgba(var(--accent-rgb) / 0.06) 55%,
+      transparent 100%
     );
   mix-blend-mode: screen;
-  opacity: 0.35;
-  filter: blur(0.2px);
+  opacity: 0.32;
+  filter: blur(0.15px);
 }
 
 .bg-sheen {

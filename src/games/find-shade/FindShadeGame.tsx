@@ -231,10 +231,10 @@ export function FindShadeGame() {
                         top: `${y}%`,
                         background: `linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02)), ${c.hex}`,
                         borderColor: active
-                          ? 'rgba(66,229,255,0.55)'
+                          ? 'rgba(var(--accent2-rgb) / 0.55)'
                           : 'rgba(255,255,255,0.16)',
                         boxShadow: active
-                          ? '0 0 0 1px rgba(66,229,255,0.25), 0 0 24px rgba(66,229,255,0.25)'
+                          ? '0 0 0 1px rgba(var(--accent2-rgb) / 0.25), 0 0 24px rgba(var(--accent2-rgb) / 0.22)'
                           : 'none',
                         transition:
                           'border-color 420ms cubic-bezier(0.22,1,0.36,1), box-shadow 420ms cubic-bezier(0.22,1,0.36,1)',

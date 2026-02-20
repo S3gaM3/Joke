@@ -18,10 +18,14 @@ export function ResultPlaque({
   visible,
   onClose,
 }: ResultPlaqueProps) {
-  const accent =
+  const accentHi =
     tone === 'success'
-      ? 'rgba(255, 210, 138, 0.9)'
-      : 'rgba(177, 140, 255, 0.82)'
+      ? 'rgba(var(--accent2-rgb) / 0.90)'
+      : 'rgba(var(--accent-rgb) / 0.82)'
+  const accentGlow =
+    tone === 'success'
+      ? 'rgba(var(--accent2-rgb) / 0.18)'
+      : 'rgba(var(--accent-rgb) / 0.18)'
 
   return (
     <AnimatePresence>
@@ -36,10 +40,7 @@ export function ResultPlaque({
           <div
             className="pointer-events-auto glass-strong w-full overflow-hidden rounded-[22px] px-7 py-6"
             style={{
-              boxShadow: `0 0 0 1px rgba(255,255,255,0.18), 0 30px 90px rgba(0,0,0,0.75), 0 0 26px ${accent.replace(
-                '0.9',
-                '0.18',
-              )}`,
+              boxShadow: `0 0 0 1px rgba(255,255,255,0.18), 0 30px 90px rgba(0,0,0,0.75), 0 0 26px ${accentGlow}`,
             }}
             role="status"
             aria-live="polite"
@@ -52,7 +53,7 @@ export function ResultPlaque({
                 <div
                   className="mt-3 h-px w-full"
                   style={{
-                    background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${accentHi}, transparent)`,
                     opacity: 0.55,
                   }}
                 />

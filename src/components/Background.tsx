@@ -29,7 +29,7 @@ export function Background() {
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--bg-0),var(--bg-2))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--bg-0),var(--bg-3))]" />
 
       <div className="absolute inset-0 opacity-80" style={style}>
         <div className="absolute inset-0 bg-grid" />

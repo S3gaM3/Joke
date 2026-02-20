@@ -237,7 +237,7 @@ export function ComposeLinesGame() {
             className="pointer-events-none absolute inset-0 opacity-70"
             style={{
               background:
-                'radial-gradient(900px 520px at 20% 0%, rgba(177,140,255,0.10), transparent 60%), radial-gradient(800px 460px at 95% 15%, rgba(66,229,255,0.10), transparent 58%)',
+                'radial-gradient(900px 520px at 20% 0%, rgba(var(--accent2-rgb) / 0.10), transparent 60%), radial-gradient(800px 460px at 95% 15%, rgba(var(--accent-rgb) / 0.07), transparent 58%)',
             }}
           />
 
@@ -263,7 +263,7 @@ export function ComposeLinesGame() {
           {lines.map((ln) => {
             const glow = ln.captured
               ? '0 0 0 1px rgba(255,210,138,0.22), 0 0 28px rgba(255,210,138,0.18)'
-              : '0 0 0 1px rgba(255,255,255,0.08), 0 0 22px rgba(66,229,255,0.10)'
+              : '0 0 0 1px rgba(255,255,255,0.08), 0 0 22px rgba(var(--accent2-rgb) / 0.12)'
             const lost = mode === 'lost' && !ln.captured
             return (
               <button
@@ -290,7 +290,7 @@ export function ComposeLinesGame() {
                   className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded-full"
                   style={{
                     background:
-                      'linear-gradient(90deg, transparent, rgba(255,255,255,0.72), rgba(66,229,255,0.65), rgba(255,255,255,0.35), transparent)',
+                      'linear-gradient(90deg, transparent, rgba(255,255,255,0.72), rgba(var(--accent2-rgb) / 0.78), rgba(255,255,255,0.35), transparent)',
                     boxShadow: glow,
                     opacity: ln.captured ? 0.95 : 0.8,
                   }}
@@ -310,7 +310,7 @@ export function ComposeLinesGame() {
                 transition={{ duration: DUR.base, ease: EASE_OUT }}
                 style={{
                   background:
-                    'radial-gradient(900px 520px at 50% 60%, rgba(177,140,255,0.12), transparent 65%)',
+                    'radial-gradient(900px 520px at 50% 60%, rgba(var(--accent-rgb) / 0.10), transparent 65%)',
                 }}
               />
             ) : null}

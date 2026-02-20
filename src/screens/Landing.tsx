@@ -102,11 +102,11 @@ export function Landing() {
                 {
                   name: 'Александра',
                   code: 'A',
-                  glow: 'var(--glow-violet)',
+                  glow: 'var(--glow-danger)',
                   t: 'Brand A',
                 },
-                { name: 'Влада', code: 'V', glow: 'var(--glow-cyan)', t: 'Brand V' },
-                { name: 'Анна', code: 'A', glow: 'var(--glow-violet)', t: 'Brand A' },
+                { name: 'Влада', code: 'V', glow: 'var(--glow-accent)', t: 'Brand V' },
+                { name: 'Анна', code: 'A', glow: 'var(--glow-danger)', t: 'Brand A' },
               ].map((p) => (
                 <div
                   key={p.name}
@@ -295,7 +295,7 @@ export function Landing() {
                 className="pointer-events-none absolute inset-0 opacity-55"
                 style={{
                   background:
-                    'radial-gradient(900px 460px at 30% 0%, rgba(66,229,255,0.10), transparent 60%), radial-gradient(700px 420px at 90% 25%, rgba(177,140,255,0.12), transparent 55%)',
+                    'radial-gradient(900px 460px at 30% 0%, rgba(var(--accent2-rgb) / 0.10), transparent 60%), radial-gradient(700px 420px at 90% 25%, rgba(var(--accent-rgb) / 0.09), transparent 55%)',
                 }}
               />
               <div className="relative">
@@ -309,9 +309,9 @@ export function Landing() {
 
                 <div className="mt-8 grid items-center gap-6 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
                   {[
-                    { n: 'Александра', c: 'A', glow: 'var(--glow-violet)' },
-                    { n: 'Влада', c: 'V', glow: 'var(--glow-cyan)' },
-                    { n: 'Анна', c: 'A', glow: 'var(--glow-violet)' },
+                    { n: 'Александра', c: 'A', glow: 'var(--glow-danger)' },
+                    { n: 'Влада', c: 'V', glow: 'var(--glow-accent)' },
+                    { n: 'Анна', c: 'A', glow: 'var(--glow-danger)' },
                   ].map((p, idx) => (
                     <div key={p.n} className="contents">
                       <div

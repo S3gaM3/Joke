@@ -26,7 +26,7 @@ export function Preloader({ visible }: PreloaderProps) {
                 className="pointer-events-none absolute inset-0"
                 style={{
                   background:
-                    'radial-gradient(720px 360px at 20% 0%, rgba(177,140,255,0.22), transparent 55%), radial-gradient(640px 330px at 90% 20%, rgba(66,229,255,0.18), transparent 55%)',
+                    'radial-gradient(720px 360px at 18% 0%, rgba(var(--accent2-rgb) / 0.16), transparent 56%), radial-gradient(640px 330px at 92% 20%, rgba(var(--accent-rgb) / 0.14), transparent 55%)',
                 }}
               />
 
@@ -62,11 +62,11 @@ export function Preloader({ visible }: PreloaderProps) {
                         />
                         <stop
                           offset="0.55"
-                          stopColor="rgba(66,229,255,0.9)"
+                          stopColor="rgba(var(--accent2-rgb) / 0.92)"
                         />
                         <stop
                           offset="0.75"
-                          stopColor="rgba(177,140,255,0.85)"
+                          stopColor="rgba(var(--accent-rgb) / 0.82)"
                         />
                         <stop offset="1" stopColor="rgba(255,255,255,0)" />
                       </linearGradient>
@@ -121,7 +121,7 @@ export function Preloader({ visible }: PreloaderProps) {
                       background:
                         'linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.25))',
                       boxShadow:
-                        '0 0 0 1px rgba(255,255,255,0.15), 0 0 26px rgba(66,229,255,0.24)',
+                        '0 0 0 1px rgba(255,255,255,0.15), 0 0 28px rgba(var(--accent2-rgb) / 0.20)',
                     }}
                     animate={reduced ? undefined : { opacity: [0.4, 1, 0.55] }}
                     transition={

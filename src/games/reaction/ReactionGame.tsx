@@ -52,7 +52,7 @@ function Icon({ kind }: { kind: IconKind }) {
         />
         <path
           d="M3 9 L12 9 L21 9"
-          stroke="rgba(66,229,255,0.65)"
+          stroke="rgba(var(--accent2-rgb) / 0.78)"
           strokeWidth="1.2"
           strokeLinecap="round"
           opacity="0.9"
@@ -96,7 +96,7 @@ function Icon({ kind }: { kind: IconKind }) {
       />
       <path
         d="M12 2.8 14.8 9"
-        stroke="rgba(66,229,255,0.65)"
+        stroke="rgba(var(--accent2-rgb) / 0.78)"
         strokeWidth="1.2"
         strokeLinecap="round"
       />
@@ -310,7 +310,7 @@ export function ReactionGame() {
             className="pointer-events-none absolute inset-0 opacity-70"
             style={{
               background:
-                'radial-gradient(900px 520px at 20% 0%, rgba(177,140,255,0.10), transparent 60%), radial-gradient(800px 460px at 95% 15%, rgba(66,229,255,0.10), transparent 58%)',
+                'radial-gradient(900px 520px at 20% 0%, rgba(var(--accent2-rgb) / 0.10), transparent 60%), radial-gradient(800px 460px at 95% 15%, rgba(var(--accent-rgb) / 0.07), transparent 58%)',
             }}
           />
 
@@ -320,7 +320,7 @@ export function ReactionGame() {
                 key={target.id}
                 type="button"
                 onClick={onHit}
-                className="absolute grid size-[62px] place-items-center rounded-2xl border border-white/16 bg-white/6 shadow-[0_0_0_1px_rgba(255,255,255,0.08),_0_22px_60px_rgba(0,0,0,0.68)] transition-all duration-500 ease-in-out hover:-translate-y-1 hover:border-[rgba(66,229,255,0.45)] hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                className="absolute grid size-[62px] place-items-center rounded-2xl border border-white/16 bg-white/6 shadow-[0_0_0_1px_rgba(255,255,255,0.08),_0_22px_60px_rgba(0,0,0,0.68)] transition-all duration-500 ease-in-out hover:-translate-y-1 hover:border-[rgba(var(--accent2-rgb)/0.45)] hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
                 style={{
                   left: target.x,
                   top: target.y,
@@ -363,7 +363,7 @@ export function ReactionGame() {
                   className="grid size-[34px] place-items-center rounded-2xl border border-white/10 bg-white/4"
                   style={{
                     boxShadow:
-                      '0 0 0 1px rgba(255,255,255,0.06), 0 0 26px rgba(66,229,255,0.18)',
+                      '0 0 0 1px rgba(255,255,255,0.06), 0 0 26px rgba(var(--accent2-rgb) / 0.18)',
                   }}
                 >
                   <Icon kind={b.k} />
@@ -398,7 +398,7 @@ export function ReactionGame() {
                   className="grid size-[30px] place-items-center rounded-2xl border border-white/10 bg-white/3"
                   style={{
                     boxShadow:
-                      '0 0 0 1px rgba(255,255,255,0.05), 0 0 22px rgba(177,140,255,0.16)',
+                      '0 0 0 1px rgba(255,255,255,0.05), 0 0 22px rgba(var(--accent-rgb) / 0.14)',
                   }}
                 >
                   <Icon kind={b.k} />
