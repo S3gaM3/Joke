@@ -9,6 +9,8 @@ import { ReactionGame } from '../../games/reaction/ReactionGame'
 type SurpriseDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
+  tab?: 'shade' | 'lines' | 'react'
+  onTabChange?: (tab: 'shade' | 'lines' | 'react') => void
 }
 
 function CloseIcon() {
@@ -24,7 +26,21 @@ function CloseIcon() {
   )
 }
 
-export function SurpriseDialog({ open, onOpenChange }: SurpriseDialogProps) {
+export function SurpriseDialog({
+  open,
+  onOpenChange,
+  tab,
+  onTabChange,
+}: SurpriseDialogProps) {
+  const tabsRootProps =
+    tab && onTabChange
+      ? {
+          value: tab,
+          onValueChange: (v: string) =>
+            onTabChange(v as 'shade' | 'lines' | 'react'),
+        }
+      : { defaultValue: 'shade' as const }
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -76,7 +92,7 @@ export function SurpriseDialog({ open, onOpenChange }: SurpriseDialogProps) {
                 <div className="px-7 pb-7 sm:px-8 sm:pb-8">
                   <div className="h-px w-full chrome-line opacity-40" />
 
-                  <Tabs.Root defaultValue="shade" className="mt-6">
+                  <Tabs.Root {...tabsRootProps} className="mt-6">
                     <Tabs.List className="flex flex-wrap gap-2">
                       {[
                         { v: 'shade', t: 'Найди оттенок' },

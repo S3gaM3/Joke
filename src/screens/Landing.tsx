@@ -1,12 +1,18 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Button } from '../components/Button'
+import { Monogram } from '../components/Monogram'
 import { Reveal } from '../components/Reveal'
+import { MaterialTuner } from '../features/material/MaterialTuner'
+import { ComplimentPanel } from '../features/compliments/ComplimentPanel'
 import { SurpriseDialog } from '../features/surprise/SurpriseDialog'
 import { EASE_OUT } from '../lib/motion'
 
 export function Landing() {
   const [surpriseOpen, setSurpriseOpen] = useState(false)
+  const [surpriseTab, setSurpriseTab] = useState<'shade' | 'lines' | 'react'>(
+    'shade',
+  )
 
   return (
     <div className="min-h-dvh">
@@ -75,7 +81,12 @@ export function Landing() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button onClick={() => setSurpriseOpen(true)}>
+              <Button
+                onClick={() => {
+                  setSurpriseTab('shade')
+                  setSurpriseOpen(true)
+                }}
+              >
                 Открыть сюрприз
               </Button>
               <a
@@ -88,9 +99,14 @@ export function Landing() {
 
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
               {[
-                { name: 'Александра', code: 'A', glow: 'var(--glow-violet)' },
-                { name: 'Влада', code: 'V', glow: 'var(--glow-cyan)' },
-                { name: 'Анна', code: 'A', glow: 'var(--glow-violet)' },
+                {
+                  name: 'Александра',
+                  code: 'A',
+                  glow: 'var(--glow-violet)',
+                  t: 'Brand A',
+                },
+                { name: 'Влада', code: 'V', glow: 'var(--glow-cyan)', t: 'Brand V' },
+                { name: 'Анна', code: 'A', glow: 'var(--glow-violet)', t: 'Brand A' },
               ].map((p) => (
                 <div
                   key={p.name}
@@ -103,7 +119,7 @@ export function Landing() {
                         {p.name}
                       </div>
                       <div className="mt-1 text-xs tracking-[0.25em] text-white/45">
-                        DESIGN BRAND
+                        {p.t.toUpperCase()} · DESIGN
                       </div>
                     </div>
                     <div className="grid size-10 place-items-center rounded-2xl border border-white/15 bg-white/5">
@@ -115,13 +131,59 @@ export function Landing() {
 
                   <div className="mt-6 h-px w-full chrome-line opacity-40 transition-opacity duration-500 ease-in-out group-hover:opacity-70" />
                   <p className="mt-5 text-sm leading-relaxed text-white/60">
-                    Минимализм, воздух и точность. Всё ровно, как вы любите.
+                    Три отдельных имени — как три логотипа на одной панели. Всё
+                    звучит вместе, но не сливается.
                   </p>
                 </div>
               ))}
             </div>
           </div>
         </motion.div>
+
+        <section className="mt-14">
+          <Reveal>
+            <div className="glass relative overflow-hidden p-8 sm:p-10">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-55"
+                style={{
+                  background:
+                    'radial-gradient(900px 460px at 20% 0%, rgba(var(--accent2-rgb) / 0.12), transparent 60%), radial-gradient(760px 420px at 92% 10%, rgba(var(--accent-rgb) / 0.12), transparent 58%)',
+                }}
+              />
+              <div className="relative grid gap-8 sm:grid-cols-[auto_1fr] sm:items-center">
+                <Monogram size={118} />
+                <div>
+                  <div className="font-display text-2xl font-semibold tracking-tight text-white/90">
+                    Вензель AVA
+                  </div>
+                  <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/60">
+                    Символ коллаборации: строгое, геометричное «A‑V‑A» без
+                    лишних украшений. Как шильдик на кузове — маленький, но
+                    безошибочно узнаваемый.
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center gap-3">
+                    <Button
+                      variant="glass"
+                      onClick={() => {
+                        setSurpriseTab('react')
+                        setSurpriseOpen(true)
+                      }}
+                    >
+                      Тест‑драйв: реакция
+                    </Button>
+                    <a
+                      href="#materials"
+                      className="neon-underline rounded-full px-5 py-3 text-sm text-white/70 transition-all duration-500 ease-in-out hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                    >
+                      Материалы
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </section>
 
         <section className="mt-14">
           <Reveal>
@@ -153,6 +215,74 @@ export function Landing() {
                   </p>
                 </div>
               ))}
+            </div>
+          </Reveal>
+        </section>
+
+        <section className="mt-14">
+          <Reveal>
+            <div className="glass p-8 sm:p-10">
+              <div className="flex flex-wrap items-start justify-between gap-6">
+                <div>
+                  <div className="font-display text-2xl font-semibold tracking-tight text-white/90">
+                    Кодекс премиального интерфейса
+                  </div>
+                  <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/60">
+                    Не «много эффектов», а правильная инженерия впечатления:
+                    воздух, контраст, холодный металл и точная анимация.
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs tracking-[0.25em] text-white/40">
+                    RULESET
+                  </div>
+                  <div className="font-display mt-1 text-sm tracking-tight text-white/70">
+                    6 PRINCIPLES
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {[
+                  {
+                    t: 'Пауза важнее скорости',
+                    d: 'Интерфейс «весит» и не суетится: 0.3–0.5с, плавный ease-in-out.',
+                  },
+                  {
+                    t: 'Свет — это материал',
+                    d: 'Неон не кричит, а подсвечивает ребра, как отражение на лаке.',
+                  },
+                  {
+                    t: 'Точность в мелочи',
+                    d: 'Радиусы, линии, сетка и отступы — как подгонка деталей.',
+                  },
+                  {
+                    t: 'Один акцент',
+                    d: 'Фокус на главном: один активный цвет и вторичная поддержка.',
+                  },
+                  {
+                    t: 'Стекло без «пластика»',
+                    d: 'Мягкий blur, тонкая рамка и глубокая тень вместо дешёвого градиента.',
+                  },
+                  {
+                    t: 'Реакция на касание',
+                    d: 'Hover — это «подсветка панели», а не прыжок элементов.',
+                  },
+                ].map((c) => (
+                  <div
+                    key={c.t}
+                    className="glass rounded-[18px] p-7 transition-all duration-500 ease-in-out hover:-translate-y-1"
+                  >
+                    <div className="font-display text-lg font-semibold tracking-tight text-white/88">
+                      {c.t}
+                    </div>
+                    <div className="mt-3 h-px w-full chrome-line opacity-35" />
+                    <p className="mt-4 text-sm leading-relaxed text-white/60">
+                      {c.d}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </Reveal>
         </section>
@@ -219,6 +349,12 @@ export function Landing() {
           </Reveal>
         </section>
 
+        <section id="materials" className="mt-14">
+          <Reveal>
+            <MaterialTuner />
+          </Reveal>
+        </section>
+
         <section id="surprise" className="mt-14">
           <Reveal>
             <div className="glass p-8 sm:p-10">
@@ -242,16 +378,38 @@ export function Landing() {
 
               <div className="mt-8 grid gap-5 sm:grid-cols-3">
                 {[
-                  { t: 'Найди оттенок', d: 'Премиальное колесо выбора — как регулятор в авто.' },
-                  { t: 'Собери композицию', d: 'Поймай линии по таймингу и собери вензель.' },
-                  { t: 'Реакция', d: 'Клик‑тест: иконки появляются и исчезают всё быстрее.' },
+                  {
+                    t: 'Найди оттенок',
+                    d: 'Премиальное колесо выбора — как регулятор в авто.',
+                    tab: 'shade' as const,
+                  },
+                  {
+                    t: 'Собери композицию',
+                    d: 'Поймай линии по таймингу и собери вензель.',
+                    tab: 'lines' as const,
+                  },
+                  {
+                    t: 'Реакция',
+                    d: 'Клик‑тест: иконки появляются и исчезают всё быстрее.',
+                    tab: 'react' as const,
+                  },
                 ].map((g) => (
-                  <div
+                  <button
                     key={g.t}
-                    className="glass rounded-[18px] p-7 transition-all duration-500 ease-in-out hover:-translate-y-1"
+                    type="button"
+                    onClick={() => {
+                      setSurpriseTab(g.tab)
+                      setSurpriseOpen(true)
+                    }}
+                    className="glass rounded-[18px] p-7 text-left transition-all duration-500 ease-in-out hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
                   >
-                    <div className="font-display text-lg font-semibold tracking-tight text-white/88">
-                      {g.t}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="font-display text-lg font-semibold tracking-tight text-white/88">
+                        {g.t}
+                      </div>
+                      <div className="font-display text-sm tracking-tight text-white/40">
+                        ↗
+                      </div>
                     </div>
                     <div className="mt-3 h-px w-full chrome-line opacity-35" />
                     <p className="mt-4 text-sm leading-relaxed text-white/60">
@@ -260,10 +418,16 @@ export function Landing() {
                     <div className="mt-6 text-xs tracking-[0.22em] text-white/40">
                       PREMIUM MINI GAME
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
+          </Reveal>
+        </section>
+
+        <section className="mt-14">
+          <Reveal>
+            <ComplimentPanel />
           </Reveal>
         </section>
 
@@ -274,7 +438,12 @@ export function Landing() {
         </footer>
       </main>
 
-      <SurpriseDialog open={surpriseOpen} onOpenChange={setSurpriseOpen} />
+      <SurpriseDialog
+        open={surpriseOpen}
+        onOpenChange={setSurpriseOpen}
+        tab={surpriseTab}
+        onTabChange={setSurpriseTab}
+      />
     </div>
   )
 }

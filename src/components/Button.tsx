@@ -33,7 +33,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           background:
             variant === 'glass'
               ? 'radial-gradient(420px 120px at 30% 0%, rgba(255,255,255,0.14), transparent 55%)'
-              : 'radial-gradient(520px 160px at 30% 0%, rgba(66,229,255,0.20), transparent 55%), radial-gradient(520px 160px at 75% 0%, rgba(177,140,255,0.16), transparent 55%)',
+              : 'radial-gradient(520px 160px at 30% 0%, rgba(var(--accent-rgb) / 0.20), transparent 55%), radial-gradient(520px 160px at 75% 0%, rgba(var(--accent2-rgb) / 0.16), transparent 55%)',
         }}
       />
       {props.children}
