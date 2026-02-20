@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Button } from '../components/Button'
+import { InstrumentCluster } from '../components/InstrumentCluster'
 import { Monogram } from '../components/Monogram'
 import { Reveal } from '../components/Reveal'
 import { MaterialTuner } from '../features/material/MaterialTuner'
@@ -57,27 +58,22 @@ export function Landing() {
           initial={{ opacity: 0, y: 26, filter: 'blur(10px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.6, ease: EASE_OUT }}
-          className="glass relative overflow-hidden p-10 sm:p-12"
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-60"
-            style={{
-              background:
-                'radial-gradient(800px 420px at 25% 0%, rgba(177, 140, 255, 0.18), transparent 60%), radial-gradient(650px 360px at 90% 20%, rgba(66, 229, 255, 0.14), transparent 55%)',
-            }}
+          <InstrumentCluster
+            title="STARTUP SEQUENCE"
+            subtitle="Александра · Влада · Анна"
           />
 
-          <div className="relative">
+          <div className="mt-6 glass dash-panel hud-scan overflow-hidden p-8 sm:p-10">
             <div className="font-display text-xs font-semibold tracking-[0.38em] text-white/55">
-              ULTRA MODERN · DARK · CHROME · GLASS
+              SPORTY · METAL · CARBON · HUD
             </div>
             <h1 className="font-display mt-5 text-balance text-4xl font-bold tracking-[-0.02em] text-white/92 sm:text-6xl">
               Три имени. Один безупречный стиль.
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-white/68 sm:text-lg">
-              Этот сайт — маленькая, но премиальная витрина уважения к вашему
-              вкусу: строгая геометрия, дорогие материалы и сдержанная динамика.
+              Не «стекло ради стекла», а интерфейс‑кокпит: строгая геометрия,
+              глубокие материалы, точный свет и спортивная динамика.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -89,6 +85,15 @@ export function Landing() {
               >
                 Открыть сюрприз
               </Button>
+              <Button
+                variant="glass"
+                onClick={() => {
+                  setSurpriseTab('react')
+                  setSurpriseOpen(true)
+                }}
+              >
+                Тест реакции
+              </Button>
               <a
                 href="#collab"
                 className="neon-underline rounded-full px-5 py-3 text-sm text-white/70 transition-all duration-500 ease-in-out hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
@@ -97,7 +102,7 @@ export function Landing() {
               </a>
             </div>
 
-            <div className="mt-10 grid gap-5 sm:grid-cols-3">
+            <div className="mt-9 grid gap-5 sm:grid-cols-3">
               {[
                 {
                   name: 'Александра',
@@ -105,12 +110,17 @@ export function Landing() {
                   glow: 'var(--glow-danger)',
                   t: 'Brand A',
                 },
-                { name: 'Влада', code: 'V', glow: 'var(--glow-accent)', t: 'Brand V' },
+                {
+                  name: 'Влада',
+                  code: 'V',
+                  glow: 'var(--glow-accent)',
+                  t: 'Brand V',
+                },
                 { name: 'Анна', code: 'A', glow: 'var(--glow-danger)', t: 'Brand A' },
               ].map((p) => (
                 <div
                   key={p.name}
-                  className="group glass rounded-[18px] p-6 transition-all duration-500 ease-in-out hover:-translate-y-1"
+                  className="group glass dash-panel-sm rounded-[18px] p-6 transition-all duration-500 ease-in-out hover:-translate-y-1"
                   style={{ boxShadow: p.glow }}
                 >
                   <div className="flex items-start justify-between">
@@ -129,10 +139,10 @@ export function Landing() {
                     </div>
                   </div>
 
-                  <div className="mt-6 h-px w-full chrome-line opacity-40 transition-opacity duration-500 ease-in-out group-hover:opacity-70" />
+                  <div className="mt-6 h-px w-full chrome-line opacity-45 transition-opacity duration-500 ease-in-out group-hover:opacity-80" />
                   <p className="mt-5 text-sm leading-relaxed text-white/60">
-                    Три отдельных имени — как три логотипа на одной панели. Всё
-                    звучит вместе, но не сливается.
+                    Три отдельных имени — как три режима. Всё звучит вместе, но
+                    не сливается.
                   </p>
                 </div>
               ))}
