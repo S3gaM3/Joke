@@ -1,0 +1,389 @@
+@import "tailwindcss";
+
+/* Design tokens: iOS-inspired (materials / calm premium) */
+:root {
+  color-scheme: dark;
+
+  /* iOS dark-like palette */
+  --bg-0: #000000;
+  --bg-1: #0b0b0f;
+  --bg-2: #121216;
+  --bg-3: #1c1c1e; /* secondarySystemBackground */
+
+  --fg-0: rgba(255, 255, 255, 0.96);
+  --fg-1: rgba(235, 235, 245, 0.86); /* secondaryLabel */
+  --fg-2: rgba(235, 235, 245, 0.60); /* tertiaryLabel */
+
+  --stroke-0: rgba(255, 255, 255, 0.10);
+  --stroke-1: rgba(255, 255, 255, 0.14);
+
+  --chrome-0: rgba(255, 255, 255, 0.72);
+  --chrome-1: rgba(255, 255, 255, 0.42);
+
+  /* iOS system colors (approx) */
+  --accent-rgb: 10 132 255; /* systemBlue */
+  --accent2-rgb: 94 92 230; /* systemIndigo-ish */
+  --accent3-rgb: 48 209 88; /* systemGreen */
+  --danger-rgb: 255 69 58; /* systemRed */
+
+  --accent: rgb(var(--accent-rgb));
+  --accent2: rgb(var(--accent2-rgb));
+  --accent3: rgb(var(--accent3-rgb));
+  --danger: rgb(var(--danger-rgb));
+
+  /* iOS material */
+  --glass-blur: 22px;
+  --glass-strong-blur: 28px;
+  --grid-size: 72px;
+
+  --glass: rgba(28, 28, 30, 0.62);
+  --glass-2: rgba(44, 44, 46, 0.55);
+  --glass-3: rgba(58, 58, 60, 0.40);
+
+  --panel-0: rgba(28, 28, 30, 0.72);
+  --panel-1: rgba(44, 44, 46, 0.55);
+  --panel-2: rgba(58, 58, 60, 0.40);
+
+  --shadow-0: 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 10px 30px rgba(0, 0, 0, 0.55);
+  --shadow-1: 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 18px 60px rgba(0, 0, 0, 0.65);
+
+  --glow-accent: 0 0 0 1px rgba(var(--accent-rgb) / 0.18),
+    0 0 26px rgba(var(--accent-rgb) / 0.14);
+  --glow-danger: 0 0 0 1px rgba(var(--danger-rgb) / 0.18),
+    0 0 26px rgba(var(--danger-rgb) / 0.12);
+
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  --cut: 16px;
+  --cut-sm: 10px;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Text", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+    "Segoe UI", Roboto, Arial, sans-serif;
+
+  font-family: var(--font-text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(900px 520px at 18% 0%, rgba(var(--accent-rgb) / 0.18), transparent 60%),
+    radial-gradient(860px 520px at 92% 10%, rgba(var(--accent2-rgb) / 0.14), transparent 62%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-2));
+  color: var(--fg-0);
+}
+
+::selection {
+  background: rgba(var(--accent2-rgb) / 0.24);
+}
+
+/* Subtle scrollbar like premium UI */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08));
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+
+/* Premium range input */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-rgb) / 0.55),
+    rgba(255, 255, 255, 0.16)
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.25)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 26px rgba(var(--accent-rgb) / 0.18);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 34px rgba(var(--accent-rgb) / 0.26);
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-rgb) / 0.55),
+    rgba(255, 255, 255, 0.16)
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.25)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 26px rgba(var(--accent-rgb) / 0.18);
+}
+
+/* Utility-ish helpers (kept minimal; most layout will be Tailwind utilities) */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.glass {
+  position: relative;
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-0);
+  backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
+}
+
+.glass-strong {
+  position: relative;
+  background: var(--glass-2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: saturate(180%) blur(var(--glass-strong-blur));
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-strong-blur));
+}
+
+/* Compatibility: previous "dash" classes become iOS-rounded */
+.dash-panel {
+  position: relative;
+  border-radius: 24px;
+  clip-path: none;
+}
+.dash-panel-sm {
+  border-radius: 18px;
+  clip-path: none;
+}
+.hud-scan {
+  position: relative;
+}
+.hud-scan::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity: 0;
+  mix-blend-mode: overlay;
+}
+.m-stripe {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-rgb) / 0.90),
+    rgba(var(--accent2-rgb) / 0.82)
+  );
+}
+
+/* iOS-like highlight + subtle noise */
+.glass::before,
+.glass-strong::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.02) 30%,
+    rgba(255, 255, 255, 0.06) 70%,
+    rgba(255, 255, 255, 0.02)
+  );
+  opacity: 0.40;
+  mix-blend-mode: normal;
+}
+.glass::after,
+.glass-strong::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  opacity: 0.10;
+  mix-blend-mode: overlay;
+}
+
+.chrome-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+}
+
+.neon-underline {
+  position: relative;
+}
+.neon-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 55%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--accent-rgb) / 0.9),
+    transparent
+  );
+  filter: blur(0.2px);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.neon-underline:hover::after,
+.neon-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@keyframes drift-y {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -34px, 0);
+  }
+}
+
+@keyframes sheen {
+  0% {
+    transform: translate3d(-20%, 0, 0) rotate(12deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.3;
+  }
+  55% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate3d(110%, 0, 0) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.bg-grid {
+  /* iOS-like soft wallpaper blobs */
+  background-image:
+    radial-gradient(520px 420px at 20% 30%, rgba(var(--accent-rgb) / 0.24), transparent 60%),
+    radial-gradient(520px 420px at 80% 20%, rgba(var(--accent2-rgb) / 0.22), transparent 60%),
+    radial-gradient(560px 460px at 50% 85%, rgba(255,255,255,0.06), transparent 68%);
+  background-size: cover;
+  mask-image: radial-gradient(
+    900px 640px at 50% 20%,
+    rgba(0, 0, 0, 0.9),
+    transparent 70%
+  );
+  opacity: 0.72;
+  animation: drift-y 16s linear infinite alternate;
+}
+
+.bg-lines {
+  background-image: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 48%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  opacity: 0.18;
+  filter: blur(0.3px);
+}
+
+.bg-sheen {
+  position: relative;
+}
+.bg-sheen::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+  filter: blur(0.3px);
+  animation: sheen 9.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  opacity: 0;
+}
+
+.bg-vignette {
+  background: radial-gradient(
+      900px 520px at 50% 15%,
+      transparent 0%,
+      rgba(0, 0, 0, 0.22) 55%,
+      rgba(0, 0, 0, 0.52) 100%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.54));
+  opacity: 0.95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-grid {
+    animation: none;
+  }
+  .bg-sheen::before {
+    animation: none;
+    opacity: 0.12;
+  }
+}
