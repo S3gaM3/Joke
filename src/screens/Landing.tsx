@@ -8,12 +8,6 @@ import { EASE_OUT } from '../lib/motion'
 export function Landing() {
   const [surpriseOpen, setSurpriseOpen] = useState(false)
 
-  const scrollToSurprise = () => {
-    document
-      .getElementById('surprise')
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
     <div className="min-h-dvh">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
