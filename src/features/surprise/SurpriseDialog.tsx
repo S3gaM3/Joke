@@ -5,12 +5,44 @@ import { DUR, EASE_OUT } from '../../lib/motion'
 import { FindShadeGame } from '../../games/find-shade/FindShadeGame'
 import { ComposeLinesGame } from '../../games/lines/ComposeLinesGame'
 import { ReactionGame } from '../../games/reaction/ReactionGame'
+import { LaunchControlGame } from '../../games/launch-control/LaunchControlGame'
+import { ShiftPointsGame } from '../../games/shift/ShiftPointsGame'
+import { ParkingSensorGame } from '../../games/parking/ParkingSensorGame'
+import { HudMemoryGame } from '../../games/hud-memory/HudMemoryGame'
+import { ApexLineGame } from '../../games/apex/ApexLineGame'
+import { AmbientLightGame } from '../../games/ambient/AmbientLightGame'
+import { CarbonAlignGame } from '../../games/carbon/CarbonAlignGame'
+import { DriftAngleGame } from '../../games/drift/DriftAngleGame'
 
 type SurpriseDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
-  tab?: 'shade' | 'lines' | 'react'
-  onTabChange?: (tab: 'shade' | 'lines' | 'react') => void
+  tab?:
+    | 'shade'
+    | 'lines'
+    | 'react'
+    | 'launch'
+    | 'shift'
+    | 'park'
+    | 'hud'
+    | 'apex'
+    | 'ambient'
+    | 'carbon'
+    | 'drift'
+  onTabChange?: (
+    tab:
+      | 'shade'
+      | 'lines'
+      | 'react'
+      | 'launch'
+      | 'shift'
+      | 'park'
+      | 'hud'
+      | 'apex'
+      | 'ambient'
+      | 'carbon'
+      | 'drift',
+  ) => void
 }
 
 function CloseIcon() {
@@ -32,12 +64,24 @@ export function SurpriseDialog({
   tab,
   onTabChange,
 }: SurpriseDialogProps) {
+  type TabKey =
+    | 'shade'
+    | 'lines'
+    | 'react'
+    | 'launch'
+    | 'shift'
+    | 'park'
+    | 'hud'
+    | 'apex'
+    | 'ambient'
+    | 'carbon'
+    | 'drift'
+
   const tabsRootProps =
     tab && onTabChange
       ? {
           value: tab,
-          onValueChange: (v: string) =>
-            onTabChange(v as 'shade' | 'lines' | 'react'),
+          onValueChange: (v: string) => onTabChange(v as TabKey),
         }
       : { defaultValue: 'shade' as const }
 
@@ -93,34 +137,73 @@ export function SurpriseDialog({
                   <div className="h-px w-full chrome-line opacity-40" />
 
                   <Tabs.Root {...tabsRootProps} className="mt-6">
-                    <Tabs.List className="flex flex-wrap gap-2">
-                      {[
-                        { v: 'shade', t: 'Найди оттенок' },
-                        { v: 'lines', t: 'Собери композицию' },
-                        { v: 'react', t: 'Реакция' },
-                      ].map((tab) => (
-                        <Tabs.Trigger
-                          key={tab.v}
-                          value={tab.v}
-                          className="rounded-full border border-white/14 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-500 ease-in-out hover:border-white/22 hover:bg-white/7 hover:text-white/88 data-[state=active]:border-[rgba(var(--accent2-rgb)/0.46)] data-[state=active]:bg-white/8 data-[state=active]:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
-                        >
-                          <span className="font-display tracking-tight">
-                            {tab.t}
-                          </span>
-                        </Tabs.Trigger>
-                      ))}
-                    </Tabs.List>
+                    <div className="grid gap-5 lg:grid-cols-[260px_1fr] lg:items-start">
+                      <Tabs.List className="flex gap-2 overflow-x-auto pb-2 lg:block lg:overflow-visible lg:pb-0">
+                        {(
+                          [
+                            { v: 'launch', t: 'Launch Control' },
+                            { v: 'shift', t: 'Shift Points' },
+                            { v: 'park', t: 'Parking Sensor' },
+                            { v: 'hud', t: 'HUD Memory' },
+                            { v: 'react', t: 'Реакция' },
+                            { v: 'lines', t: 'Собери композицию' },
+                            { v: 'shade', t: 'Найди оттенок' },
+                            { v: 'ambient', t: 'Ambient Light' },
+                            { v: 'apex', t: 'Apex Line' },
+                            { v: 'drift', t: 'Drift Angle' },
+                            { v: 'carbon', t: 'Carbon Align' },
+                          ] as const
+                        ).map((it) => (
+                          <Tabs.Trigger
+                            key={it.v}
+                            value={it.v}
+                            className="dash-panel-sm shrink-0 rounded-[16px] border border-white/12 bg-white/4 px-4 py-3 text-left text-sm text-white/70 transition-all duration-500 ease-in-out hover:-translate-y-0.5 hover:border-white/22 hover:bg-white/6 hover:text-white/88 data-[state=active]:border-[rgba(var(--accent2-rgb)/0.50)] data-[state=active]:bg-white/7 data-[state=active]:text-white/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 lg:mb-2 lg:w-full"
+                          >
+                            <div className="font-display tracking-tight">
+                              {it.t}
+                            </div>
+                            <div className="mt-1 text-[11px] tracking-[0.25em] text-white/40">
+                              MODE
+                            </div>
+                          </Tabs.Trigger>
+                        ))}
+                      </Tabs.List>
 
-                    <div className="mt-5">
-                      <Tabs.Content value="shade" className="focus:outline-none">
-                        <FindShadeGame />
-                      </Tabs.Content>
-                      <Tabs.Content value="lines" className="focus:outline-none">
-                        <ComposeLinesGame />
-                      </Tabs.Content>
-                      <Tabs.Content value="react" className="focus:outline-none">
-                        <ReactionGame />
-                      </Tabs.Content>
+                      <div className="min-w-0">
+                        <Tabs.Content value="launch" className="focus:outline-none">
+                          <LaunchControlGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="shift" className="focus:outline-none">
+                          <ShiftPointsGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="park" className="focus:outline-none">
+                          <ParkingSensorGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="hud" className="focus:outline-none">
+                          <HudMemoryGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="react" className="focus:outline-none">
+                          <ReactionGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="lines" className="focus:outline-none">
+                          <ComposeLinesGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="shade" className="focus:outline-none">
+                          <FindShadeGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="ambient" className="focus:outline-none">
+                          <AmbientLightGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="apex" className="focus:outline-none">
+                          <ApexLineGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="drift" className="focus:outline-none">
+                          <DriftAngleGame />
+                        </Tabs.Content>
+                        <Tabs.Content value="carbon" className="focus:outline-none">
+                          <CarbonAlignGame />
+                        </Tabs.Content>
+                      </div>
                     </div>
                   </Tabs.Root>
                 </div>

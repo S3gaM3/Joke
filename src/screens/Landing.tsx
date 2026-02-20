@@ -11,9 +11,19 @@ import { EASE_OUT } from '../lib/motion'
 
 export function Landing() {
   const [surpriseOpen, setSurpriseOpen] = useState(false)
-  const [surpriseTab, setSurpriseTab] = useState<'shade' | 'lines' | 'react'>(
-    'shade',
-  )
+  const [surpriseTab, setSurpriseTab] = useState<
+    | 'shade'
+    | 'lines'
+    | 'react'
+    | 'launch'
+    | 'shift'
+    | 'park'
+    | 'hud'
+    | 'apex'
+    | 'ambient'
+    | 'carbon'
+    | 'drift'
+  >('launch')
 
   return (
     <div className="min-h-dvh">
@@ -79,7 +89,7 @@ export function Landing() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button
                 onClick={() => {
-                  setSurpriseTab('shade')
+                  setSurpriseTab('launch')
                   setSurpriseOpen(true)
                 }}
               >
@@ -88,11 +98,11 @@ export function Landing() {
               <Button
                 variant="glass"
                 onClick={() => {
-                  setSurpriseTab('react')
+                  setSurpriseTab('launch')
                   setSurpriseOpen(true)
                 }}
               >
-                Тест реакции
+                Launch Control
               </Button>
               <a
                 href="#collab"
@@ -374,8 +384,8 @@ export function Landing() {
                     Сюрприз · Игры
                   </div>
                   <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">
-                    Три мини‑игры на 30–60 секунд — не про «скилл», а про
-                    удовольствие от взаимодействия.
+                    Десять мини‑режимов на 30–60 секунд — не про «скилл», а про
+                    удовольствие от взаимодействия в стиле приборной панели.
                   </p>
                 </div>
                   <Button
@@ -386,8 +396,28 @@ export function Landing() {
                   </Button>
               </div>
 
-              <div className="mt-8 grid gap-5 sm:grid-cols-3">
+              <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {[
+                  {
+                    t: 'Launch Control',
+                    d: 'Поймай GO без фальстарта. Точный старт — это характер.',
+                    tab: 'launch' as const,
+                  },
+                  {
+                    t: 'Shift Points',
+                    d: 'Переключай строго в зелёном окне RPM. Темп и дисциплина.',
+                    tab: 'shift' as const,
+                  },
+                  {
+                    t: 'Parking Sensor',
+                    d: 'Остановись в зоне 15–25cm. Парковка ювелирная.',
+                    tab: 'park' as const,
+                  },
+                  {
+                    t: 'HUD Memory',
+                    d: 'Повтори последовательность световых сегментов. 3 раунда.',
+                    tab: 'hud' as const,
+                  },
                   {
                     t: 'Найди оттенок',
                     d: 'Премиальное колесо выбора — как регулятор в авто.',
@@ -403,6 +433,26 @@ export function Landing() {
                     d: 'Клик‑тест: иконки появляются и исчезают всё быстрее.',
                     tab: 'react' as const,
                   },
+                  {
+                    t: 'Ambient Light',
+                    d: 'Настройка подсветки: оттенок + яркость. Тонкая калибровка.',
+                    tab: 'ambient' as const,
+                  },
+                  {
+                    t: 'Apex Line',
+                    d: 'Траектория по точкам: возьми апекс спокойно и точно.',
+                    tab: 'apex' as const,
+                  },
+                  {
+                    t: 'Drift Angle',
+                    d: 'Держи угол в окне ±3°. Управление как в панели.',
+                    tab: 'drift' as const,
+                  },
+                  {
+                    t: 'Carbon Align',
+                    d: 'Подгони текстуру карбона до идеального совпадения.',
+                    tab: 'carbon' as const,
+                  },
                 ].map((g) => (
                   <button
                     key={g.t}
@@ -411,7 +461,7 @@ export function Landing() {
                       setSurpriseTab(g.tab)
                       setSurpriseOpen(true)
                     }}
-                    className="glass rounded-[18px] p-7 text-left transition-all duration-500 ease-in-out hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                    className="glass dash-panel-sm rounded-[18px] p-7 text-left transition-all duration-500 ease-in-out hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="font-display text-lg font-semibold tracking-tight text-white/88">
