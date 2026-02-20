@@ -17,6 +17,16 @@ type Target = {
   ttlMs: number
 }
 
+type Particle = {
+  id: string
+  x: number
+  y: number
+  dx: number
+  dy: number
+  rot: number
+  k: IconKind
+}
+
 const WIN_MESSAGES = [
   'Скорость мысли! Вы невероятно быстры.',
   'Вы успеваете за всеми трендами и задачами. Респект!',
@@ -108,9 +118,8 @@ export function ReactionGame() {
   const [result, setResult] = useState<null | { tone: 'success' | 'fail'; msg: string }>(
     null,
   )
-  const [burst, setBurst] = useState<{ id: string; x: number; y: number; k: IconKind }[]>(
-    [],
-  )
+  const [burst, setBurst] = useState<Particle[]>([])
+  const [farewell, setFarewell] = useState<Particle[]>([])
 
   const goal = 18
 
@@ -168,16 +177,34 @@ export function ReactionGame() {
       const cx = Math.round(dims.aw * 0.5)
       const cy = Math.round(dims.ah * 0.5)
       const kinds: IconKind[] = ['star', 'diamond', 'bulb']
-      const b = Array.from({ length: 16 }, (_, i) => ({
+      const b: Particle[] = Array.from({ length: 16 }, (_, i) => ({
         id: uid(`b${i}`),
         x: cx + randInt(-40, 40),
         y: cy + randInt(-30, 30),
+        dx: randInt(-220, 220),
+        dy: randInt(-180, 180),
+        rot: randInt(-40, 40),
         k: kinds[randInt(0, 2)]!,
       }))
       setBurst(b)
+      setFarewell([])
       window.setTimeout(() => setBurst([]), 1300)
     } else {
       setBurst([])
+      const cx = Math.round(dims.aw * 0.5)
+      const cy = Math.round(dims.ah * 0.45)
+      const kinds: IconKind[] = ['star', 'diamond', 'bulb']
+      const f: Particle[] = Array.from({ length: 12 }, (_, i) => ({
+        id: uid(`f${i}`),
+        x: cx + randInt(-80, 80),
+        y: cy + randInt(-40, 40),
+        dx: randInt(-180, 180),
+        dy: randInt(160, 260),
+        rot: randInt(-55, 55),
+        k: kinds[randInt(0, 2)]!,
+      }))
+      setFarewell(f)
+      window.setTimeout(() => setFarewell([]), 1200)
     }
   }, [dims.ah, dims.aw])
 
@@ -188,6 +215,7 @@ export function ReactionGame() {
     setScore(0)
     setMisses(0)
     setBurst([])
+    setFarewell([])
     finishedRef.current = false
     spawn(0)
   }
@@ -201,6 +229,7 @@ export function ReactionGame() {
     setScore(0)
     setMisses(0)
     setBurst([])
+    setFarewell([])
     finishedRef.current = false
   }
 
@@ -322,9 +351,9 @@ export function ReactionGame() {
                 animate={{
                   opacity: [0, 1, 0],
                   scale: [0.7, 1, 0.9],
-                  x: randInt(-220, 220),
-                  y: randInt(-180, 180),
-                  rotate: randInt(-40, 40),
+                  x: b.dx,
+                  y: b.dy,
+                  rotate: b.rot,
                   filter: ['blur(6px)', 'blur(0px)', 'blur(8px)'],
                 }}
                 exit={{ opacity: 0 }}
@@ -335,6 +364,41 @@ export function ReactionGame() {
                   style={{
                     boxShadow:
                       '0 0 0 1px rgba(255,255,255,0.06), 0 0 26px rgba(66,229,255,0.18)',
+                  }}
+                >
+                  <Icon kind={b.k} />
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {farewell.map((b) => (
+              <motion.div
+                key={b.id}
+                className="pointer-events-none absolute"
+                style={{
+                  left: b.x,
+                  top: b.y,
+                  transform: 'translate(-50%, -50%)',
+                }}
+                initial={{ opacity: 0, scale: 0.7, filter: 'blur(10px)' }}
+                animate={{
+                  opacity: [0, 0.85, 0],
+                  scale: [0.8, 1, 0.85],
+                  x: b.dx,
+                  y: b.dy,
+                  rotate: b.rot,
+                  filter: ['blur(8px)', 'blur(0px)', 'blur(12px)'],
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.1, ease: EASE_IN_OUT }}
+              >
+                <div
+                  className="grid size-[30px] place-items-center rounded-2xl border border-white/10 bg-white/3"
+                  style={{
+                    boxShadow:
+                      '0 0 0 1px rgba(255,255,255,0.05), 0 0 22px rgba(177,140,255,0.16)',
                   }}
                 >
                   <Icon kind={b.k} />

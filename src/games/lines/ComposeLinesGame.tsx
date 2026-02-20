@@ -102,6 +102,7 @@ export function ComposeLinesGame() {
   const [lines, setLines] = useState<LineState[]>(() => createLines(640, 360))
   const [timeLeft, setTimeLeft] = useState(22)
   const [misses, setMisses] = useState(0)
+  const [flash, setFlash] = useState(false)
   const [result, setResult] = useState<null | { tone: 'success' | 'fail'; msg: string }>(
     null,
   )
@@ -115,6 +116,7 @@ export function ComposeLinesGame() {
     setResult(null)
     setMisses(0)
     setTimeLeft(22)
+    setFlash(false)
     setLines(createLines(dims.aw, dims.ah))
   }
 
@@ -122,6 +124,7 @@ export function ComposeLinesGame() {
     setResult(null)
     setMisses(0)
     setTimeLeft(22)
+    setFlash(false)
     setLines(createLines(dims.aw, dims.ah))
     setMode('running')
   }
@@ -191,6 +194,8 @@ export function ComposeLinesGame() {
     if (!hit) setMisses((m) => m + 1)
     if (win) {
       setMode('won')
+      setFlash(true)
+      window.setTimeout(() => setFlash(false), 520)
       setResult({ tone: 'success', msg: sample(WIN_MESSAGES) })
     }
   }
@@ -306,6 +311,23 @@ export function ComposeLinesGame() {
                 style={{
                   background:
                     'radial-gradient(900px 520px at 50% 60%, rgba(177,140,255,0.12), transparent 65%)',
+                }}
+              />
+            ) : null}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {flash ? (
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DUR.base, ease: EASE_OUT }}
+                style={{
+                  background:
+                    'radial-gradient(900px 520px at 50% 45%, rgba(255,210,138,0.18), transparent 65%)',
                 }}
               />
             ) : null}
