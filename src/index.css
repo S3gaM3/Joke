@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/* Design tokens: premium dark / graphite / chrome / neon */
+:root {
+  color-scheme: dark;
+
+  --bg-0: #05070a; /* deep black */
+  --bg-1: #0a0f14; /* graphite */
+  --bg-2: #0f151c; /* wet asphalt */
+
+  --fg-0: rgba(255, 255, 255, 0.92);
+  --fg-1: rgba(255, 255, 255, 0.78);
+  --fg-2: rgba(255, 255, 255, 0.56);
+
+  --stroke-0: rgba(255, 255, 255, 0.14);
+  --stroke-1: rgba(255, 255, 255, 0.22);
+
+  --chrome-0: rgba(255, 255, 255, 0.86);
+  --chrome-1: rgba(210, 220, 230, 0.7);
+
+  --neon-cyan: #42e5ff;
+  --neon-violet: #b18cff;
+  --neon-amber: #ffd28a;
+
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-2: rgba(255, 255, 255, 0.085);
+  --glass-3: rgba(255, 255, 255, 0.12);
+
+  --shadow-0: 0 0 0 1px var(--stroke-0), 0 18px 55px rgba(0, 0, 0, 0.65);
+  --shadow-1: 0 0 0 1px var(--stroke-1), 0 28px 85px rgba(0, 0, 0, 0.72);
+  --glow-cyan: 0 0 0 1px rgba(66, 229, 255, 0.25), 0 0 22px rgba(66, 229, 255, 0.22);
+  --glow-violet: 0 0 0 1px rgba(177, 140, 255, 0.22), 0 0 26px rgba(177, 140, 255, 0.18);
+
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  --font-display: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  --font-text: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", "Liberation Sans", sans-serif;
+
+  font-family: var(--font-text);
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 900px at 20% -10%, rgba(177, 140, 255, 0.14), transparent 60%),
+    radial-gradient(900px 700px at 90% 10%, rgba(66, 229, 255, 0.12), transparent 55%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-2));
+  color: var(--fg-0);
+}
+
+::selection {
+  background: rgba(66, 229, 255, 0.22);
+}
+
+/* Subtle scrollbar like premium UI */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08));
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+
+/* Utility-ish helpers (kept minimal; most layout will be Tailwind utilities) */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--stroke-0);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-0);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-strong {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--stroke-1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.chrome-line {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+}
+
+.neon-underline {
+  position: relative;
+}
+.neon-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 55%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, transparent, rgba(66, 229, 255, 0.9), transparent);
+  filter: blur(0.2px);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.neon-underline:hover::after,
+.neon-underline:focus-visible::after {
+  transform: scaleX(1);
+}
